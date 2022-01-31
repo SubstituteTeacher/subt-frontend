@@ -67,7 +67,7 @@ const About = () => {
       <div
         style={{ height: "100vh", backgroundColor: "beige", display: "flex" }}
       >
-        <Container className="p-0 align-self-end" fluid>
+        <Container className="p-0 align-self-end d-none d-lg-block" fluid>
           <Row className="m-0 justify-content-center text-center">
             <h1>{`Välkommen!`}</h1>
             <Col className="m-5">
@@ -92,6 +92,34 @@ const About = () => {
           </Row>
         </Container>
       </div>
+      <Container
+        className="p-0 align-self-end d-lg-none"
+        fluid
+        style={{ backgroundColor: "beige" }}
+      >
+        <Row className="m-0 justify-content-center text-center">
+          <h1>{`Välkommen!`}</h1>
+          <Col className="m-5">
+            <div
+              id="map-container"
+              className="rounded z-depth-1-half map-container"
+              style={{
+                height: "50vh",
+                boxShadow: "0 5px 15px rgba(0, 0, 0, 0.3)",
+              }}
+            >
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d753.741671069942!2d11.95719688660027!3d57.701111195768654!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x464ff369ad5ca2d7%3A0x121e41012a8d3714!2sFeskek%C3%B6rka!5e0!3m2!1ssv!2sse!4v1643670983394!5m2!1ssv!2sse"
+                title="This is a unique title"
+                width="100%"
+                height="100%"
+                frameBorder="1"
+                style={{ border: 0 }}
+              />
+            </div>
+          </Col>
+        </Row>
+      </Container>
     </>
   );
 };
