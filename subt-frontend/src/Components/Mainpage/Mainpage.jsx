@@ -5,9 +5,10 @@ import {
   Row,
   Card,
   Button,
-  ButtonGroup,
   Modal,
   Form,
+  OverlayTrigger,
+  Tooltip,
 } from "react-bootstrap";
 import { useState } from "react";
 
@@ -20,6 +21,7 @@ const Mainpage = () => {
   const handleShow = () => setShow((current) => !current);
   const [overtime, setOvertime] = useState(false);
   const [extraHours, setExtraHours] = useState();
+  const date = new Date();
   const [jobInfo, setJobinfo] = useState({
     title: "",
     location: "",
@@ -105,7 +107,7 @@ const Mainpage = () => {
               </Row>
 
               <Button
-                className="card-btn mt-1 p-0"
+                className="card-btn mt-3 p-0"
                 onClick={() => {
                   setJobinfo({
                     title: card.title,
@@ -176,7 +178,7 @@ const Mainpage = () => {
               </Form.Group>
             </Form>
           </Modal.Body>
-          <Modal.Footer className="justify-content-space-between">
+          <Modal.Footer className="justify-content-between">
             <Form.Group>
               <Form.Check
                 type="checkbox"
@@ -187,10 +189,37 @@ const Mainpage = () => {
                 }}
               />
             </Form.Group>
-
-            <Button variant="primary" onClick={handleModalShow}>
-              {`Skicka rapport`}
-            </Button>
+            <OverlayTrigger
+              overlay={
+                !(
+                  isChecked ||
+                  (date.toLocaleTimeString() > jobInfo.timeEnd &&
+                    date.toLocaleDateString() >= jobInfo.date)
+                ) ? (
+                  <Tooltip id="tooltip-disabled">
+                    {`Du kan endast rapportera om du är sjuk, eller lektionen avslutats`}
+                  </Tooltip>
+                ) : (
+                  <></>
+                )
+              }
+            >
+              <span className="d-inline-block">
+                <Button
+                  variant="primary"
+                  onClick={() => handleModalShow()}
+                  disabled={
+                    !(
+                      isChecked ||
+                      (date.toLocaleTimeString() > jobInfo.timeEnd &&
+                        date.toLocaleDateString() >= jobInfo.date)
+                    )
+                  }
+                >
+                  {`Skicka rapport`}
+                </Button>
+              </span>
+            </OverlayTrigger>
           </Modal.Footer>
         </Modal>
         <Container className="job-container">
@@ -201,7 +230,10 @@ const Mainpage = () => {
             </Col>
             <Col>
               {show ? (
-                <div className="text-white jobinfo-box">
+                <div
+                  className="text-white jobinfo-box "
+                  style={{ textShadow: "1px 1px black" }}
+                >
                   <h1>{jobInfo.title}</h1>
                   <h3>{`Skola: ${jobInfo.schoolName} - ${jobInfo.location}`}</h3>
                   <h4>{`Kurs: ${jobInfo.class}`}</h4>
@@ -209,9 +241,17 @@ const Mainpage = () => {
                   <h4>{`Tid: ${jobInfo.timeStart} - ${jobInfo.timeEnd}`}</h4>
                   <p>{`${jobInfo.text}`}</p>
                   <br />
-                  <Button
-                    onClick={() => setModalShow(true)}
-                  >{`Rapportera`}</Button>
+                  <div>
+                    <Button
+                      variant="primary"
+                      onClick={() => setModalShow(true)}
+                    >{`Rapportera`}</Button>
+                    <Button
+                      className="m-1"
+                      variant="secondary"
+                      onClick={handleShow}
+                    >{`stäng`}</Button>
+                  </div>
                 </div>
               ) : (
                 <></>
