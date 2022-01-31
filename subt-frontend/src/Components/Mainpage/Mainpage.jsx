@@ -131,7 +131,7 @@ const Mainpage = () => {
 
   return (
     <div id="mainpage-background">
-      <div className="background-opacity">
+      <div className="mainpage-opacity">
         <Modal
           show={modalShow}
           onHide={handleModalShow}

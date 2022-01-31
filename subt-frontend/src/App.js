@@ -1,14 +1,15 @@
 import Landing from "./Components/Pages/Landing/Landing";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import LoginPage from "./Components/LoginPage/LoginPage";
 import HeaderNav from "./Components/HeaderNav/HeaderNav";
+import About from "./Components/About/About";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 //import { getToken, removeToken } from "./Services/Storage/StorageHelper";
 //import jwt_decode from "jwt-decode";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  const [isloggedIn, setIsLoggedIn] = useState(false)
+  const [isloggedIn, setIsLoggedIn] = useState(true)
 
   // const CheckValidation = () => {
   //   const token = getToken() // Get your token from the request
@@ -42,8 +43,16 @@ function App() {
           <HeaderNav />
           <Routes>
             <Route
+              path={'/'}
+              element={<LoginPage setIsLoggedIn={setIsLoggedIn} />}
+            />
+            <Route
               path={'/main'}
               element={<Landing />}
+            />
+            <Route
+              path={'/about'}
+              element={<About />}
             />
           </Routes>
         </>
