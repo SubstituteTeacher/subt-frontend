@@ -1,4 +1,10 @@
+import Mainpage from "../../Mainpage/Mainpage";
+
 const Landing = () => {
-  return <>HELLO WORLD</>;
+  return (
+    <>
+      <Mainpage />
+    </>
+  );
 };
 export default Landing;

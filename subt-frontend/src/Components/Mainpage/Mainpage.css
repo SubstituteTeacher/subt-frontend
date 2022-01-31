@@ -1,0 +1,79 @@
+#mainpage-background {
+  background-image: url(https://www.cornerstone.se/globalassets/amnesomraden/windows-infrastruktur/windows-powershell-automating-administration.jpg?width=1370&mode=crop&heightratio=0.6345&quality=80);
+  background-position: center;
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
+}
+
+.background-opacity {
+  background: rgba(0, 0, 0, 0.3);
+  height: 100vh;
+}
+
+.job-container {
+  padding-top: 15vh;
+  max-height: 100vh;
+}
+
+.todo {
+  max-height: 75vh;
+}
+
+/* Card box size and style. */
+.card-display {
+  margin: auto;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease-in-out;
+  background-color: rgba(255, 255, 255, 0.822) !important;
+}
+
+/* Card box hover */
+.card-display:hover {
+  -webkit-transform: scale(1.01, 1.01);
+  transform: scale(1.01, 1.01);
+}
+
+/* Card box shadow on hover */
+.card-display::after {
+  content: "";
+  border-radius: 10px;
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* */
+.card-display:hover::after {
+  opacity: 1;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}
+::-webkit-scrollbar-thumb:window-inactive {
+  background: rgba(0, 0, 0, 0.2);
+}
