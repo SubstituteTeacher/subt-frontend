@@ -7,7 +7,7 @@ const HeaderNav = () => {
       <Row className="m-auto text-center">
         <Col xs={8} className="d-flex m-auto">
           <Col>
-            <Nav.Link href="#home">{`Hem`}</Nav.Link>
+            <Nav.Link href="/main">{`Hem`}</Nav.Link>
           </Col>
           <Col>
             <Nav.Link href="#pewdiepie">{`pewpew`}</Nav.Link>

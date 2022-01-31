@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button, Card, Form, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+//import { setToken } from "../../Services/Storage/StorageHelper";
 import "./LoginPage.css";
 
 const LoginPage = (props) => {
@@ -13,18 +14,22 @@ const LoginPage = (props) => {
   const navigate = useNavigate();
   const tempData = [
     {
+      id: "9876543210",
       email: "asd@hotmail.com",
       password: "asd",
       firstname: "Berit",
       lastname: "Bengal",
       role: "Administrator",
+      token: "",
     },
     {
+      id: "1234567890",
       email: "hej123@hotmail.com",
       password: "hej123",
       firstname: "Kenny",
       lastname: "Kofot",
       role: "User",
+      token: "",
     },
   ];
 
@@ -53,9 +58,9 @@ const LoginPage = (props) => {
     /* IFALL CREDENTIALS ÄR TRUE, SKICKA VIDARE TILL INLOGG */
     if (login) {
       if (isCredentials === true) {
-        //setToken(data.loggedIn.Token);
-        navigate(`/main`);
+        //setToken();
         props.setIsLoggedIn(true);
+        navigate(`/main`);
         setShow(false);
       } else {
         setShow(true);
