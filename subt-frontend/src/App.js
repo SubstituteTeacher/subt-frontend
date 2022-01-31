@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 //import { getToken, removeToken } from "./Services/Storage/StorageHelper";
 //import jwt_decode from "jwt-decode";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Footer from "./Components/Footer/Footer";
 
 function App() {
   const [isloggedIn, setIsLoggedIn] = useState(true)
@@ -55,6 +56,7 @@ function App() {
               element={<About />}
             />
           </Routes>
+          <Footer />
         </>
       ) : (
         <Routes>

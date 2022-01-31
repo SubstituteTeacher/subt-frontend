@@ -1,4 +1,5 @@
 import { Container, Row, Col, Card } from "react-bootstrap";
+import { FaPhoneAlt, FaEnvelope, FaMapPin } from "react-icons/fa";
 import "./About.css";
 
 const About = () => {
@@ -56,9 +57,18 @@ const About = () => {
                 <br />
                 <br />
                 <br />
-                <Card.Text>{`0707-3232 70`}</Card.Text>
-                <Card.Text>{`hello@dothisnow.com`}</Card.Text>
-                <Card.Text>{`Krögargatan 26B, 416 22 Göteborg`}</Card.Text>
+                <Card.Text>
+                  <FaPhoneAlt size={25} style={{ fill: "pink" }} />{" "}
+                  {`0707-3232 70`}
+                </Card.Text>
+                <Card.Text>
+                  <FaEnvelope size={25} style={{ fill: "pink" }} />{" "}
+                  {`hello@dothisnow.com`}
+                </Card.Text>
+                <Card.Text>
+                  <FaMapPin size={25} style={{ fill: "pink" }} />{" "}
+                  {`Krögargatan 26B, 416 22 Göteborg`}
+                </Card.Text>
               </Card.Body>
             </Card>
           </Col>

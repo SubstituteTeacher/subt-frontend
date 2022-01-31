@@ -1,0 +1,19 @@
+.footer-main {
+  width: 100%;
+}
+
+.footer-row img {
+  max-width: 85px;
+}
+.footer-main ul {
+  list-style-type: none;
+  text-align: left;
+  max-width: 400px;
+  margin: auto;
+}
+.footer-main li,
+.footer-main a {
+  text-decoration: none !important;
+  color: white !important;
+  padding-bottom: 5px;
+}
