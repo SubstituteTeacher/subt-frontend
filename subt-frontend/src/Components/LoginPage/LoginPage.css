@@ -13,3 +13,12 @@
   display: flex;
   margin-top: 10%;
 }
+
+.error {
+  width: 25rem;
+  height: 20rem;
+  background-color: rgba(0, 0, 0, 0.8) !important;
+  display: flex;
+  margin-top: 6%;
+  color: red !important;
+}
