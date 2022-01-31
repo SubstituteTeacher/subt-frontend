@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import { Button, Card, Form, Spinner } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./LoginPage.css";
 
-const LoginPage = () => {
+const LoginPage = (props) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [isCredentials, setIsCredentials] = useState(false);
   const [login, setLogin] = useState(false); //Sets to true if user press login.
   const [loading, setLoading] = useState(false); //Loading boolean for user experience
   const [show, setShow] = useState(false); //Shows popup if credentials are incorrect.
+  const navigate = useNavigate();
   const tempData = [
     {
       email: "asd@hotmail.com",
@@ -53,7 +54,8 @@ const LoginPage = () => {
     if (login) {
       if (isCredentials === true) {
         //setToken(data.loggedIn.Token);
-        //navigate(`/main`);
+        navigate(`/main`);
+        props.setIsLoggedIn(true);
         setShow(false);
       } else {
         setShow(true);

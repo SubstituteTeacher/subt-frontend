@@ -1,4 +1,4 @@
-import { Col, Container, Nav, Row, Image } from "react-bootstrap";
+import { Col, Container, Nav, Row } from "react-bootstrap";
 import "./HeaderNav.css";
 
 const HeaderNav = () => {

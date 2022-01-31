@@ -1,11 +1,4 @@
-import HeaderNav from "../../HeaderNav/HeaderNav";
-import LoginPage from "../../LoginPage/LoginPage";
-
 const Landing = () => {
-  return (
-    <>
-      <LoginPage />
-    </>
-  );
+  return <>HELLO WORLD</>;
 };
 export default Landing;
