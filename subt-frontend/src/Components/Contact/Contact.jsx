@@ -34,18 +34,18 @@ const Contact = () => {
           >
             <Form className="p-5">
               <Form.Group className="mb-3" controlId="nameForm">
-                <Form.Label>Ditt namn</Form.Label>
+                <Form.Label>{`Ditt namn`}</Form.Label>
                 <Form.Control type="text" placeholder="Namn" />
               </Form.Group>
               <Form.Group className="mb-3" controlId="emailForm">
-                <Form.Label>Din email</Form.Label>
+                <Form.Label>{`Din email`}</Form.Label>
                 <Form.Control type="email" placeholder="email@exempel.com" />
               </Form.Group>
               <Form.Group
                 className="mb-3"
                 controlId="exampleForm.ControlTextarea1"
               >
-                <Form.Label>Ditt meddelande</Form.Label>
+                <Form.Label>{`Ditt meddelande`}</Form.Label>
                 <Form.Control
                   as="textarea"
                   rows={3}
@@ -86,18 +86,18 @@ const Contact = () => {
           <Col>
             <Form className="">
               <Form.Group className="mb-3" controlId="nameForm">
-                <Form.Label>Ditt namn</Form.Label>
+                <Form.Label>{`Ditt namn`}</Form.Label>
                 <Form.Control type="text" placeholder="Namn" />
               </Form.Group>
               <Form.Group className="mb-3" controlId="emailForm">
-                <Form.Label>Din email</Form.Label>
+                <Form.Label>{`Din email`}</Form.Label>
                 <Form.Control type="email" placeholder="email@exempel.com" />
               </Form.Group>
               <Form.Group
                 className="mb-3"
                 controlId="exampleForm.ControlTextarea1"
               >
-                <Form.Label>Ditt meddelande</Form.Label>
+                <Form.Label>{`Ditt meddelande`}</Form.Label>
                 <Form.Control
                   as="textarea"
                   rows={3}
