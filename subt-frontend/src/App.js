@@ -3,6 +3,7 @@ import { useState } from "react";
 import LoginPage from "./Components/LoginPage/LoginPage";
 import HeaderNav from "./Components/HeaderNav/HeaderNav";
 import About from "./Components/About/About";
+import Contact from "./Components/Contact/Contact";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 //import { getToken, removeToken } from "./Services/Storage/StorageHelper";
 //import jwt_decode from "jwt-decode";
@@ -54,6 +55,10 @@ function App() {
             <Route
               path={'/about'}
               element={<About />}
+            />
+            <Route
+              path={'/contact'}
+              element={<Contact />}
             />
           </Routes>
           <Footer />

@@ -19,7 +19,7 @@ const HeaderNav = () => {
             <Nav.Link href="/about">{`Om oss`}</Nav.Link>
           </Col>
           <Col>
-            <Nav.Link href="#contact">{`Kontakt`}</Nav.Link>
+            <Nav.Link href="/contact">{`Kontakt`}</Nav.Link>
           </Col>
         </Col>
       </Row>
