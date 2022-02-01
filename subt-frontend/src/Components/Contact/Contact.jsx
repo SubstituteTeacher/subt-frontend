@@ -28,7 +28,7 @@ const Contact = () => {
             lg={5}
             className="lg-0 mb-4 mx-auto d-none d-md-block"
             style={{
-              borderRadius: "25px",
+              borderRadius: "5px",
               boxShadow: "0 5px 15px rgba(0, 0, 0, 0.3)",
             }}
           >
