@@ -131,7 +131,7 @@ const Mainpage = () => {
 
   return (
     <div id="mainpage-background">
-      <div className="mainpage-opacity">
+      <div className="mainpage-opacity d-flex">
         <Modal
           show={modalShow}
           onHide={handleModalShow}
@@ -222,9 +222,9 @@ const Mainpage = () => {
             </OverlayTrigger>
           </Modal.Footer>
         </Modal>
-        <Container className="job-container">
-          <Row>
-            <Col className="todo overflow-auto">
+        <Container className="job-container align-self-center m-5" fluid>
+          <Row className="mx-auto">
+            <Col className="todo overflow-auto" sm={12} md={6}>
               <h1 className="text-white text-center">{`TODO'S`}</h1>
               <div>{tempJobs.map(renderJobs)}</div>
             </Col>

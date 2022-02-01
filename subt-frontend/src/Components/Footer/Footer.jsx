@@ -12,10 +12,10 @@ import {
 
 const Footer = () => {
   return (
-    <div className="footer-main bg-primary p-3">
+    <div className="footer-main bg-primary p-5">
       <div className="footer-text-area text-center">
-        <Row className="footer-row text-center align-items-center p-0">
-          <Col sm={7} xs={12}>
+        <Row className="footer-row align-items-center p-0 justify-content-between">
+          <Col xs={12} sm={6} md={5} lg={4}>
             <ul className="contact-info-list">
               <li className="text-white">
                 <FaEnvelope size={25} style={{ fill: "white" }} />
@@ -38,7 +38,12 @@ const Footer = () => {
               </li>
             </ul>
           </Col>
-          <Col>
+          <Col className="d-none d-lg-block">
+            <div className="mx-auto text-white ">
+              <h4>{`We Are DoThisNow!`}</h4>
+            </div>
+          </Col>
+          <Col xs={12} sm={6} md={5} lg={4}>
             <a
               href="https://www.instagram.com/"
               target="_blank"
