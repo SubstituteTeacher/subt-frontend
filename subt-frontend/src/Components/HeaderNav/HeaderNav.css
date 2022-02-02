@@ -2,6 +2,30 @@
   position: absolute;
   z-index: 22;
 }
+.hamburger {
+  color: white;
+  background-color: rgba(0, 0, 0, 0.301);
+  border-radius: 5px;
+  padding: 3px;
+}
+.hamburger-open {
+  background-color: rgba(0, 0, 0, 0.75);
+  border-radius: 15px;
+  width: 18vh;
+}
+.hamburger-items {
+  padding: 5%;
+  text-align: left;
+}
+.hamburger-items a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+.hamburger-items a:hover {
+  color: white;
+  text-decoration: none;
+}
 a.nav-link {
   color: white;
   font-size: 20px;

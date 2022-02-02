@@ -75,23 +75,32 @@ const Mainpage = () => {
       text: "Planera en bollsportlektion på 4 timmar. Ha så kul.",
     },
   ];
-  
+
   const currentWindowDimensions = () => {
-    const { innerWidth: width, innerHeight: height } = window
+    const { innerWidth: width, innerHeight: height } = window;
     return {
       width,
       height,
-    }
-  }
-  const [windowDimensions, setWindowDimensions] = useState(currentWindowDimensions());
-  
+    };
+  };
+  const [windowDimensions, setWindowDimensions] = useState(
+    currentWindowDimensions()
+  );
+
   useEffect(() => {
     function handleResize() {
       setWindowDimensions(currentWindowDimensions());
     }
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    if (show && windowDimensions.width === 767) {
+      setShow(false);
+      setIsMobile(false);
+    }
+  }, [show, windowDimensions.width]);
 
   const renderJobs = (card, index) => {
     return (
@@ -101,14 +110,13 @@ const Mainpage = () => {
             <Card.Body className="d-flex flex-column ">
               <Card.Title className="mb-3">{card.title}</Card.Title>
               <Row>
-                <Col>{`Plats`}</Col>
+                <Col className="d-none d-xl-block">{`Plats`}</Col>
                 <Col>{`Skola`}</Col>
-                <Col>{`Kurs`}</Col>
+                <Col className="d-none d-xl-block d-lg-block d-sm-block d-md-none">{`Kurs`}</Col>
                 <Col>{`Datum`}</Col>
               </Row>
               <Row>
-                <Col>
-                  {" "}
+                <Col className="d-none d-xl-block">
                   <Card.Text className="text-nowrap">{card.location}</Card.Text>
                 </Col>
                 <Col>
@@ -116,7 +124,7 @@ const Mainpage = () => {
                     {card.schoolName}
                   </Card.Text>
                 </Col>
-                <Col>
+                <Col className="d-none d-xl-block d-lg-block d-sm-block d-md-none">
                   <Card.Text className="text-nowrap">{card.class}</Card.Text>
                 </Col>
                 <Col>
@@ -138,8 +146,8 @@ const Mainpage = () => {
                     text: card.text,
                   });
                   setShow(true);
-                  if(windowDimensions.width < 768){
-                    setIsMobile(true)
+                  if (windowDimensions.width < 768) {
+                    setIsMobile(true);
                   }
                 }}
               >{`Information`}</Button>
@@ -245,14 +253,13 @@ const Mainpage = () => {
         </Modal>
         <Container className="job-container align-self-center m-5" fluid>
           <Row className="mx-auto">
-            {isMobile ? 
-            (
-            <></>
+            {isMobile ? (
+              <></>
             ) : (
-            <Col className="todo overflow-auto" sm={12} md={6}>
-              <h1 className="text-white text-center">{`TODO'S`}</h1>
-              <div>{tempJobs.map(renderJobs)}</div>
-            </Col>
+              <Col className="todo overflow-auto" sm={12} md={6}>
+                <h1 className="text-white text-center">{`TODO'S`}</h1>
+                <div>{tempJobs.map(renderJobs)}</div>
+              </Col>
             )}
             <Col>
               {show ? (
@@ -276,8 +283,8 @@ const Mainpage = () => {
                       className="m-1"
                       variant="secondary"
                       onClick={() => {
-                        handleShow()
-                        setIsMobile(false)
+                        handleShow();
+                        setIsMobile(false);
                       }}
                     >{`stäng`}</Button>
                   </div>
