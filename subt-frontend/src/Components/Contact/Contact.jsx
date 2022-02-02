@@ -5,7 +5,6 @@ import {
   FaPhoneAlt,
   FaEnvelope,
   FaMapPin,
-  FaGlobe,
 } from "react-icons/fa";
 import "./Contact.css";
 

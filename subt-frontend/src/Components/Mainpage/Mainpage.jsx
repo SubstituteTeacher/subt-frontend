@@ -10,12 +10,13 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Mainpage = () => {
   const [show, setShow] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const handleCheck = () => setIsChecked((current) => !current);
   const handleModalShow = () => setModalShow((current) => !current);
   const handleShow = () => setShow((current) => !current);
@@ -74,6 +75,23 @@ const Mainpage = () => {
       text: "Planera en bollsportlektion på 4 timmar. Ha så kul.",
     },
   ];
+  
+  const currentWindowDimensions = () => {
+    const { innerWidth: width, innerHeight: height } = window
+    return {
+      width,
+      height,
+    }
+  }
+  const [windowDimensions, setWindowDimensions] = useState(currentWindowDimensions());
+  
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimensions(currentWindowDimensions());
+    }
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const renderJobs = (card, index) => {
     return (
@@ -120,6 +138,9 @@ const Mainpage = () => {
                     text: card.text,
                   });
                   setShow(true);
+                  if(windowDimensions.width < 768){
+                    setIsMobile(true)
+                  }
                 }}
               >{`Information`}</Button>
             </Card.Body>
@@ -224,10 +245,15 @@ const Mainpage = () => {
         </Modal>
         <Container className="job-container align-self-center m-5" fluid>
           <Row className="mx-auto">
+            {isMobile ? 
+            (
+            <></>
+            ) : (
             <Col className="todo overflow-auto" sm={12} md={6}>
               <h1 className="text-white text-center">{`TODO'S`}</h1>
               <div>{tempJobs.map(renderJobs)}</div>
             </Col>
+            )}
             <Col>
               {show ? (
                 <div
@@ -249,7 +275,10 @@ const Mainpage = () => {
                     <Button
                       className="m-1"
                       variant="secondary"
-                      onClick={handleShow}
+                      onClick={() => {
+                        handleShow()
+                        setIsMobile(false)
+                      }}
                     >{`stäng`}</Button>
                   </div>
                 </div>
