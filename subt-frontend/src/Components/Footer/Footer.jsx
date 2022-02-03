@@ -34,7 +34,7 @@ const Footer = () => {
               </li>
               <li>
                 <FaPhoneAlt size={25} style={{ fill: "white" }} /> &nbsp;
-                {`0707-3232 70`}
+                {`070-732 32 70`}
               </li>
             </ul>
           </Col>

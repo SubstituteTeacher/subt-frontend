@@ -60,7 +60,7 @@ const Contact = () => {
             <div className="d-none d-lg-block">
               <h5>
                 <FaPhoneAlt size={25} style={{ fill: "pink" }} />{" "}
-                {`0707-3232 70`}
+                {`070-732 32 70`}
               </h5>
               <h5>
                 <FaEnvelope size={25} style={{ fill: "pink" }} />{" "}

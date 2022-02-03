@@ -60,10 +60,10 @@ const HeaderNav = () => {
                       <a href="/main">{`Hem`}</a>
                     </Col>
                     <Col>
-                      <a href="#pewdiepie">{`pewpew`}</a>
+                      <a href="/pewdiepie">{`pewpew`}</a>
                     </Col>
                     <Col>
-                      <a href="#profile">{`Profil`}</a>
+                      <a href="/profile">{`Profil`}</a>
                     </Col>
                     <Col>
                       <a href="/about">{`Om oss`}</a>
@@ -84,10 +84,10 @@ const HeaderNav = () => {
               <Nav.Link href="/main">{`Hem`}</Nav.Link>
             </Col>
             <Col>
-              <Nav.Link href="#pewdiepie">{`pewpew`}</Nav.Link>
+              <Nav.Link href="/pewdiepie">{`pewpew`}</Nav.Link>
             </Col>
             <Col>
-              <Nav.Link href="#profile">{`Profil`}</Nav.Link>
+              <Nav.Link href="/profile">{`Profil`}</Nav.Link>
             </Col>
             <Col>
               <Nav.Link href="/about">{`Om oss`}</Nav.Link>

@@ -59,7 +59,7 @@ const About = () => {
                 <br />
                 <Card.Text>
                   <FaPhoneAlt size={25} style={{ fill: "pink" }} />{" "}
-                  {`0707-3232 70`}
+                  {`070-732 32 70`}
                 </Card.Text>
                 <Card.Text>
                   <FaEnvelope size={25} style={{ fill: "pink" }} />{" "}

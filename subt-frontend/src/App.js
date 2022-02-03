@@ -9,6 +9,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 //import jwt_decode from "jwt-decode";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Footer from "./Components/Footer/Footer";
+import Profile from "./Components/Profile/Profile";
 
 function App() {
   const [isloggedIn, setIsLoggedIn] = useState(true)
@@ -51,6 +52,10 @@ function App() {
             <Route
               path={'/main'}
               element={<Landing />}
+            />
+            <Route
+              path={'/profile'}
+              element={<Profile />}
             />
             <Route
               path={'/about'}
