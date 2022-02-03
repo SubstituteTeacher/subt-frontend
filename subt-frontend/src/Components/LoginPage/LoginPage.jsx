@@ -56,6 +56,7 @@ const LoginPage = (props) => {
 
   const validationCheck = () => {
     /* IFALL CREDENTIALS ÄR TRUE, SKICKA VIDARE TILL INLOGG */
+    console.log("FUNKAR JIRA NU");
     if (login) {
       if (isCredentials === true) {
         //setToken();
@@ -106,8 +107,7 @@ const LoginPage = (props) => {
                   setLogin(false);
                   setShow(false);
                   handleCredentials();
-                }}
-              >
+                }}>
                 {`Logga in`}
               </Button>
             ) : (
