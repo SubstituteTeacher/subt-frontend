@@ -1,16 +1,16 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "@firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBKw53meNGvORRAZOahyT0DwHdBtMYeehI",
-  authDomain: "doitnow-da98a.firebaseapp.com",
-  projectId: "doitnow-da98a",
-  storageBucket: "doitnow-da98a.appspot.com",
-  messagingSenderId: "273455128913",
-  appId: "1:273455128913:web:461f33e198a3fad7c4b370",
-  measurementId: "G-WKWZQFMFBG"
+  apiKey: process.env.REACT_APP_FB_API_KEY,
+  authDomain: process.env.REACT_APP_FB_DOMAIN,
+  projectId: process.env.REACT_APP_FB_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FB_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FB_SENDER_ID,
+  appId: process.env.REACT_APP_FB_API_ID
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const database = getFirestore(app);
+export const auth = getAuth(app);
+export default app;
