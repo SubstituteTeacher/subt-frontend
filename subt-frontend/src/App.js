@@ -1,32 +1,70 @@
-import { BrowserRouter as Router,
-  Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route, Routes
+} from "react-router-dom";
 import "./App.css";
-import Login from "./Components/LoginPage/Login";
-import MainPage from "./Components/Mainpage/Mainpage";
+import Mainpage from "./Components/Mainpage/Mainpage";
 import LoginPage from "./Components/LoginPage/LoginPage";
+import HeaderNav from "./Components/HeaderNav/HeaderNav";
+import About from "./Components/About/About"
+import Contact from "./Components/Contact/Contact"
+import Footer from "./Components/Footer/Footer"
 import Signup from "./Components/Signup/Signup";
+import Profile from "./Components/Profile/Profile";
 import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
 import { UserAuthContextProvider } from "./context/UserAuthContext";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
-          <UserAuthContextProvider>
-            <Router>
-              <Routes>
-              <Route
-                path="/"
-                element={
-                  <ProtectedRoute>
-                    <Login />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/main" element={<MainPage />} />
-              </Routes>
-            </Router>
-          </UserAuthContextProvider>
+    <Router>
+      <UserAuthContextProvider>
+        <Routes>
+          <Route
+            path="/main"
+            element={
+              <ProtectedRoute>
+                <HeaderNav />
+                <Mainpage />
+                <Footer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <HeaderNav />
+                <Profile />
+                <Footer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/about"
+            element={
+              <ProtectedRoute>
+                <HeaderNav />
+                <About />
+                <Footer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/contact"
+            element={
+              <ProtectedRoute>
+                <HeaderNav />
+                <Contact />
+                <Footer />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/signup" element={<Signup />} />
+        </Routes>
+      </UserAuthContextProvider>
+    </Router>
   );
 }
 
