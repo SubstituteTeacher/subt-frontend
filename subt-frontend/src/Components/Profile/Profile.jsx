@@ -1,4 +1,4 @@
-import { Container, Col, Row, Button, Form, Card } from "react-bootstrap";
+import { Container, Col, Row, Button } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
