@@ -241,7 +241,7 @@ const ProfileSettings = () => {
           fluid
           style={{ textShadow: "2px 2px black" }}
         >
-          <Row className="mx-auto h-100">
+          <Row className="mx-auto h-100 align-content-center">
             <Card className="information-card">
               <Card.Header className="text-center">
                 <h2 className="text-white">{`Allmänna kontoinställningar`}</h2>

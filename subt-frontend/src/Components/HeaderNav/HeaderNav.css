@@ -18,12 +18,12 @@
   text-align: left;
 }
 .hamburger-items a {
-  color: white;
+  color: white !important;
   text-decoration: none;
   font-size: 1.2rem;
 }
 .hamburger-items a:hover {
-  color: white;
+  color: white !important;
   text-decoration: none;
 }
 span a.nav-link {

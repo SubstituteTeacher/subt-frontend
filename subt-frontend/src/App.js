@@ -1,86 +1,80 @@
-import Landing from "./Components/Pages/Landing/Landing";
-import { useState } from "react";
+import {
+  BrowserRouter as Router,
+  Route, Routes
+} from "react-router-dom";
+import "./App.css";
+import Mainpage from "./Components/Mainpage/Mainpage";
 import LoginPage from "./Components/LoginPage/LoginPage";
 import HeaderNav from "./Components/HeaderNav/HeaderNav";
-import About from "./Components/About/About";
-import Contact from "./Components/Contact/Contact";
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-//import { getToken, removeToken } from "./Services/Storage/StorageHelper";
-//import jwt_decode from "jwt-decode";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Footer from "./Components/Footer/Footer";
+import About from "./Components/About/About"
+import Contact from "./Components/Contact/Contact"
+import Footer from "./Components/Footer/Footer"
+import Signup from "./Components/Signup/Signup";
 import Profile from "./Components/Profile/Profile";
 import ProfileSettings from "./Components/Profile/ProfileSettings/ProfileSettings";
+import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
+import { UserAuthContextProvider } from "./context/UserAuthContext";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  const [isloggedIn, setIsLoggedIn] = useState(true)
-
-  // const CheckValidation = () => {
-  //   const token = getToken() // Get your token from the request
-  //   /* Checks if the token is valid, stores the return value in checkToken. */
-  //   const checkToken = jwt.verify(token, 'nyckeln', function (err) {
-  //     if (err) {
-  //       removeToken()
-  //       return false
-  //     }
-  //     return true
-  //   })
-  //   setIsLoggedIn(checkToken)
-  // }
-
-  // /* checks if the token is valid every 60 second. */
-  // const tick = () => {
-  //   setInterval(function () {
-  //     CheckValidation()
-  //   }, 60000)
-  // }
-
-  // useEffect(() => {
-  //   CheckValidation()
-  //   tick()
-  // })
-
   return (
     <Router>
-      {isloggedIn ? (
-        <>
-          <HeaderNav />
-          <Routes>
-            <Route
-              path={'/'}
-              element={<LoginPage setIsLoggedIn={setIsLoggedIn} />}
-            />
-            <Route
-              path={'/main'}
-              element={<Landing />}
-            />
-            <Route
-              path={'/profile'}
-              element={<Profile />}
-            />
-            <Route
-              path={'/profile/settings'}
-              element={<ProfileSettings />}
-            />
-            <Route
-              path={'/about'}
-              element={<About />}
-            />
-            <Route
-              path={'/contact'}
-              element={<Contact />}
-            />
-          </Routes>
-          <Footer />
-        </>
-      ) : (
+      <UserAuthContextProvider>
         <Routes>
           <Route
-            path={'/'}
-            element={<LoginPage setIsLoggedIn={setIsLoggedIn} />}
+            path="/main"
+            element={
+              <ProtectedRoute>
+                <HeaderNav />
+                <Mainpage />
+                <Footer />
+              </ProtectedRoute>
+            }
           />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <HeaderNav />
+                <Profile />
+                <Footer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile/settings"
+            element={
+              <ProtectedRoute>
+                <HeaderNav />
+                <ProfileSettings />
+                <Footer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/about"
+            element={
+              <ProtectedRoute>
+                <HeaderNav />
+                <About />
+                <Footer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/contact"
+            element={
+              <ProtectedRoute>
+                <HeaderNav />
+                <Contact />
+                <Footer />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/signup" element={<Signup />} />
         </Routes>
-      )}
+      </UserAuthContextProvider>
     </Router>
   );
 }

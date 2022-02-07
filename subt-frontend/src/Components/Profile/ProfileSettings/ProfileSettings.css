@@ -12,7 +12,7 @@
 
 .information-card {
   background-color: rgba(0, 0, 0, 0.7) !important;
-  width: 61rem;
+  width: 61rem !important;
   height: 55vh;
   margin: auto;
   overflow: auto;

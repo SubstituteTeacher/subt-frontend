@@ -1,12 +1,23 @@
-import { Col, Container, Nav, Row } from "react-bootstrap";
+import { Button, Col, Container, Nav, Row } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { ImCross } from "react-icons/im";
+import { useUserAuth } from "../../context/UserAuthContext";
 import "./HeaderNav.css";
 
 const HeaderNav = () => {
   const [isOpen, setIsOpen] = useState(false);
   const handleOpen = () => setIsOpen((current) => !current);
+  const { logOut } = useUserAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logOut();
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   const currentWindowDimensions = () => {
     const { innerWidth: width, innerHeight: height } = window;
     return {
@@ -14,6 +25,7 @@ const HeaderNav = () => {
       height,
     };
   };
+
   const [windowDimensions, setWindowDimensions] = useState(
     currentWindowDimensions()
   );
@@ -60,9 +72,6 @@ const HeaderNav = () => {
                       <a href="/main">{`Hem`}</a>
                     </Col>
                     <Col>
-                      <a href="/pewdiepie">{`pewpew`}</a>
-                    </Col>
-                    <Col>
                       <a href="/profile">{`Profil`}</a>
                     </Col>
                     <Col>
@@ -70,6 +79,18 @@ const HeaderNav = () => {
                     </Col>
                     <Col>
                       <a href="/contact">{`Kontakt`}</a>
+                    </Col>
+                    <Col>
+                      <Button
+                        className="p-0 text-white"
+                        style={{
+                          textDecoration: "none",
+                          fontSize: "18px",
+                          border: "none",
+                        }}
+                        variant="link"
+                        onClick={() => handleLogout()}
+                      >{`Logga ut`}</Button>
                     </Col>
                   </Col>
                 </div>
@@ -79,15 +100,10 @@ const HeaderNav = () => {
             </div>
           </div>
         ) : (
-          <Col xs={8} className="d-flex m-auto">
+          <Col xs={10} lg={8} className="d-flex m-auto">
             <Col>
               <span>
                 <Nav.Link href="/main">{`Hem`}</Nav.Link>
-              </span>
-            </Col>
-            <Col>
-              <span>
-                <Nav.Link href="/pewdiepie">{`pewpew`}</Nav.Link>
               </span>
             </Col>
             <Col>
@@ -103,6 +119,11 @@ const HeaderNav = () => {
             <Col>
               <span>
                 <Nav.Link href="/contact">{`Kontakt`}</Nav.Link>
+              </span>
+            </Col>
+            <Col>
+              <span>
+                <Nav.Link onClick={() => handleLogout()}>{`Logga ut`}</Nav.Link>
               </span>
             </Col>
           </Col>
