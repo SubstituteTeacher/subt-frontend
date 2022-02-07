@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Footer from "./Components/Footer/Footer";
 import Profile from "./Components/Profile/Profile";
+import ProfileSettings from "./Components/Profile/ProfileSettings/ProfileSettings";
 
 function App() {
   const [isloggedIn, setIsLoggedIn] = useState(true)
@@ -56,6 +57,10 @@ function App() {
             <Route
               path={'/profile'}
               element={<Profile />}
+            />
+            <Route
+              path={'/profile/settings'}
+              element={<ProfileSettings />}
             />
             <Route
               path={'/about'}
