@@ -1,0 +1,20 @@
+.main {
+    height: 100vh;
+    background-image: url(https://www.cornerstone.se/globalassets/amnesomraden/windows-infrastruktur/windows-powershell-automating-administration.jpg?width=1370&mode=crop&heightratio=0.6345&quality=80);
+    background-position: center;
+    background-size: cover;
+  }
+  
+  .signupcard {
+    width: 25rem;
+    height: 50rem;
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    margin: auto;
+  }
+  
+  .error {
+    width: 25rem;
+    margin-top: 1%;
+    background-color: rgba(0, 0, 0, 0.8) !important;
+  }
+  
