@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Alert, Button, Card } from "react-bootstrap";
 import { useUserAuth } from "../../context/UserAuthContext";
+import "./Signup.css";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -23,7 +24,7 @@ const Signup = () => {
 
   return (
     <div className="main d-flex justify-content-center">
-      <Card className="logincard">
+      <Card className="signupcard">
         <Card.Header className="text-center">
           <h3 className="text-white">{`Skapa konto`}</h3>
         </Card.Header>
@@ -44,10 +45,57 @@ const Signup = () => {
                 <Form.Label className="text-white">{`Lösenord`}</Form.Label>
                 <Form.Control
                   type="password"
-                  placeholder="Password"
+                  placeholder="Lösenord"
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formBasicUsername">
+                <Form.Label className="text-white">{`Användarnamn`}</Form.Label>
+                <Form.Control
+                  type="username"
+                  placeholder="Användarnamn"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formBasicBank">
+                <Form.Label className="text-white">{`Bank`}</Form.Label>
+                <Form.Control
+                  type="bank"
+                  placeholder="Bank"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formBasicBankNr">
+                <Form.Label className="text-white">{`Banknummer`}</Form.Label>
+                <Form.Control
+                  type="banknr"
+                  placeholder="Banknummer"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formBasicSocialNr">
+                <Form.Label className="text-white">{`Födelsedatum`}</Form.Label>
+                <Form.Control
+                  id="date"
+                  label=""
+                  type="date"
+                  defaultValue=""
+                  />
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formBasicPhoneNr">
+                <Form.Label className="text-white">{`Telefonnummer`}</Form.Label>
+                <Form.Control
+                  type="phonenr"
+                  placeholder="Telefonnummer"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </Form.Group>
+
 
               <div className="d-grid gap-2">
                 <Button variant="primary" type="Submit">
@@ -56,7 +104,7 @@ const Signup = () => {
               </div>
             </Form>
             <div className="p-4 box mt-3 text-center text-white">
-              {`Already have an account?`} <Link to="/">{`Log In`}</Link>
+              {`Har du redan ett konto?`} <Link to="/">{`Logga in`}</Link>
             </div>
           </div>
         </Card.Body>
