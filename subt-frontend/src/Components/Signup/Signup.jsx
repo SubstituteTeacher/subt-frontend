@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Alert, Button, Card } from "react-bootstrap";
 import { useUserAuth } from "../../context/UserAuthContext";
+import { db } from "../../firebase-config";
+import { collection, addDoc } from "firebase/firestore";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -10,15 +12,22 @@ const Signup = () => {
   const { signUp } = useUserAuth();
   let navigate = useNavigate();
 
+  const usersCollectionRef = collection(db, "users");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     try {
       await signUp(email, password);
       navigate("/");
+      createUser(email, password);
     } catch (err) {
       setError(err.message);
     }
+  };
+  //create user and save to firestore
+  const createUser = async () => {
+    await addDoc(usersCollectionRef, { email: email, password: password });
   };
 
   return (
