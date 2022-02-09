@@ -11,6 +11,19 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import { useState, useEffect } from "react";
+import { db } from "../../firebase-config";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  updateDoc,
+  runTransaction,
+  doc,
+  setDoc,
+  sfDocRef,
+} from "@firebase/firestore";
+import { useUserAuth } from "../../context/UserAuthContext";
 
 const Mainpage = () => {
   const [show, setShow] = useState(false);
@@ -23,7 +36,11 @@ const Mainpage = () => {
   const [overtime, setOvertime] = useState(false);
   const [extraHours, setExtraHours] = useState();
   const date = new Date();
+  const [loading, setLoading] = useState(true);
+  const [todoCardInfo, setTodoCardInfo] = useState([]);
+  const { user } = useUserAuth();
   const [jobInfo, setJobinfo] = useState({
+    id: "",
     title: "",
     location: "",
     schoolName: "",
@@ -32,49 +49,9 @@ const Mainpage = () => {
     timeStart: "",
     timeEnd: "",
     text: "",
+    isAssigned: false,
+    userId: "",
   });
-  const tempJobs = [
-    {
-      title: "Pedagog till lågstadiet sökes",
-      location: "Göteborg",
-      schoolName: "KrampSkolan",
-      class: "Pedagogik",
-      date: "2022-01-31",
-      timeStart: "11.00",
-      timeEnd: "17.00",
-      text: "Pedagogiken skall förbättras får åk 1-3 i krampskolan. Du skall göra dom bättre genom pedagogik.",
-    },
-    {
-      title: "TDD EXPERT",
-      location: "Göteborg",
-      schoolName: "Newton",
-      class: "TDD",
-      date: "2022-02-03",
-      timeStart: "08.00",
-      timeEnd: "16.00",
-      text: "Gå igenom hela testramverket och examinera genom en quiz. Skriven utav dig själv.",
-    },
-    {
-      title: "Förskolelärare",
-      location: "Göteborg",
-      schoolName: "RosaKnatten",
-      class: "Sovtimmen",
-      date: "2022-05-14",
-      timeStart: "12.00",
-      timeEnd: "13.00",
-      text: "Håll koll på ungarna när dom sover.",
-    },
-    {
-      title: "Gymnastiklärare till högstadiet",
-      location: "Göteborg",
-      schoolName: "HögaStadiet",
-      class: "Gymnastik",
-      date: "2022-06-02",
-      timeStart: "10.00",
-      timeEnd: "14.00",
-      text: "Planera en bollsportlektion på 4 timmar. Ha så kul.",
-    },
-  ];
 
   const currentWindowDimensions = () => {
     const { innerWidth: width, innerHeight: height } = window;
@@ -101,6 +78,46 @@ const Mainpage = () => {
       setIsMobile(false);
     }
   }, [show, windowDimensions.width]);
+
+  const getTaskItems = async () => {
+    const getPostsFromFirebase = [];
+    const querySnapshot = await getDocs(
+      query(collection(db, "Tasks"), where("isAssigned", "==", false))
+    );
+    querySnapshot.forEach((doc) => {
+      getPostsFromFirebase.push({
+        ...doc.data(), //spread operator
+        id: doc.id, // `id` given to us by Firebase
+      });
+    });
+    setTodoCardInfo(getPostsFromFirebase);
+    setLoading(true);
+    return () => querySnapshot();
+  };
+
+  useEffect(() => {
+    getTaskItems();
+  }, [loading]);
+
+  const handleAssignment = async () => {
+    const sfDocRef = doc(db, "Tasks", jobInfo.id);
+    try {
+      await runTransaction(db, async (transaction) => {
+        const sfDoc = await transaction.get(sfDocRef);
+        if (!sfDoc.exists()) {
+          throw "Document does not exist!";
+        }
+        //console.log(sfDoc.data());
+        //const newPopulation = (sfDoc.data().isAssigned = true);
+        transaction.update(sfDocRef, { isAssigned: true, userId: user.uid });
+      });
+      handleShow();
+      setLoading(false);
+      console.log("Transaction successfully committed!");
+    } catch (e) {
+      console.log("Transaction failed: ", e);
+    }
+  };
 
   const renderJobs = (card, index) => {
     return (
@@ -136,6 +153,7 @@ const Mainpage = () => {
                 className="card-btn mt-3 p-0"
                 onClick={() => {
                   setJobinfo({
+                    id: card.id,
                     title: card.title,
                     location: card.location,
                     schoolName: card.schoolName,
@@ -144,6 +162,8 @@ const Mainpage = () => {
                     timeStart: card.timeStart,
                     timeEnd: card.timeEnd,
                     text: card.text,
+                    isAssigned: card.isAssigned,
+                    userId: card.userId,
                   });
                   setShow(true);
                   if (windowDimensions.width < 768) {
@@ -251,14 +271,25 @@ const Mainpage = () => {
             </OverlayTrigger>
           </Modal.Footer>
         </Modal>
-        <Container className="job-container align-self-center m-5" fluid>
+        <Container className="align-self-center m-5" fluid>
+          <Row className="mx-auto mt-5">
+            {isMobile ? (
+              <></>
+            ) : (
+              <>
+                <Col sm={12} md={6}>
+                  <h1 className="text-white text-center">{`TODO'S`}</h1>
+                </Col>
+                <Col></Col>
+              </>
+            )}
+          </Row>
           <Row className="mx-auto">
             {isMobile ? (
               <></>
             ) : (
               <Col className="todo overflow-auto" sm={12} md={6}>
-                <h1 className="text-white text-center">{`TODO'S`}</h1>
-                <div>{tempJobs.map(renderJobs)}</div>
+                <div>{todoCardInfo.map(renderJobs)}</div>
               </Col>
             )}
             <Col>
@@ -277,8 +308,11 @@ const Mainpage = () => {
                   <div>
                     <Button
                       variant="primary"
-                      onClick={() => setModalShow(true)}
-                    >{`Rapportera`}</Button>
+                      onClick={() => {
+                        handleAssignment();
+                      }}
+                      // onClick={() => setModalShow(true)}
+                    >{`Tacka ja`}</Button>
                     <Button
                       className="m-1"
                       variant="secondary"
