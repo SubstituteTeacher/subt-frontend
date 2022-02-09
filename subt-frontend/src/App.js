@@ -11,6 +11,7 @@ import Contact from "./Components/Contact/Contact"
 import Footer from "./Components/Footer/Footer"
 import Signup from "./Components/Signup/Signup";
 import Profile from "./Components/Profile/Profile";
+import ProfileSettings from "./Components/Profile/ProfileSettings/ProfileSettings";
 import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
 import { UserAuthContextProvider } from "./context/UserAuthContext";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -36,6 +37,16 @@ function App() {
               <ProtectedRoute>
                 <HeaderNav />
                 <Profile />
+                <Footer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile/settings"
+            element={
+              <ProtectedRoute>
+                <HeaderNav />
+                <ProfileSettings />
                 <Footer />
               </ProtectedRoute>
             }

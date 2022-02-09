@@ -1,0 +1,33 @@
+#profile-background {
+  background-image: url(https://www.cornerstone.se/globalassets/amnesomraden/windows-infrastruktur/windows-powershell-automating-administration.jpg?width=1370&mode=crop&heightratio=0.6345&quality=80);
+  background-position: center;
+  background-size: cover;
+  height: 100vh;
+}
+
+.profile-opacity {
+  background: rgba(0, 0, 0, 0.3);
+  height: 100vh;
+}
+
+.information-card {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  width: 61rem !important;
+  height: 55vh;
+  margin: auto;
+  overflow: auto;
+}
+
+.solid {
+  width: 58rem;
+}
+
+a.edit-btn.nav-link {
+  padding: 0;
+  color: white;
+}
+a.edit-btn.nav-link:hover {
+  padding: 0;
+  text-decoration: underline;
+  color: rgba(255, 255, 255, 0.85);
+}
