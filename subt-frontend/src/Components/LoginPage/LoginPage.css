@@ -7,17 +7,13 @@
 
 .logincard {
   width: 25rem;
-  height: 20rem;
+  height: 24rem;
   background-color: rgba(0, 0, 0, 0.8) !important;
-  display: flex;
   margin: auto;
 }
 
 .error {
   width: 25rem;
-  height: 20rem;
+  margin-top: 1%;
   background-color: rgba(0, 0, 0, 0.8) !important;
-  display: flex;
-  margin-top: 6%;
-  color: red !important;
 }
