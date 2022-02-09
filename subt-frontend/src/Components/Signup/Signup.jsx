@@ -10,7 +10,7 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [password, setPassword] = useState("");
-  const { signUp } = useUserAuth();
+  const { signUp, logOut } = useUserAuth();
   const [user, setUser] = useState();
   let navigate = useNavigate();
 
@@ -33,9 +33,18 @@ const Signup = () => {
         email: email,
         password: password,
       });
+      handleLogout();
       navigate("/");
     } catch (err) {
       setError(err.message);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logOut();
+    } catch (err) {
+      console.log(err.message);
     }
   };
 
