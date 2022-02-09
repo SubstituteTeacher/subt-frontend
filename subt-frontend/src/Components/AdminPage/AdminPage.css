@@ -1,0 +1,11 @@
+#adminpage-background {
+    background-image: url(https://www.cornerstone.se/globalassets/amnesomraden/windows-infrastruktur/windows-powershell-automating-administration.jpg?width=1370&mode=crop&heightratio=0.6345&quality=80);
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+  }
+  
+  .adminpage-opacity {
+    background: rgba(0, 0, 0, 0.3);
+    height: 100vh;
+  }

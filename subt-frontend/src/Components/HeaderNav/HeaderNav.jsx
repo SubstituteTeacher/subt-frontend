@@ -9,6 +9,7 @@ const HeaderNav = () => {
   const [isOpen, setIsOpen] = useState(false);
   const handleOpen = () => setIsOpen((current) => !current);
   const { logOut } = useUserAuth();
+  const bool = true;
 
   const handleLogout = async () => {
     try {
@@ -71,6 +72,11 @@ const HeaderNav = () => {
                     <Col>
                       <a href="/main">{`Hem`}</a>
                     </Col>
+                    {bool? (
+                      <Col>
+                      <a href="/admin">{`Användare`}</a>
+                    </Col>
+                    ): (<></>)}
                     <Col>
                       <a href="/profile">{`Profil`}</a>
                     </Col>
@@ -106,6 +112,13 @@ const HeaderNav = () => {
                 <Nav.Link href="/main">{`Hem`}</Nav.Link>
               </span>
             </Col>
+            {bool? (
+            <Col>
+              <span>
+                <Nav.Link href="/admin">{`Användare`}</Nav.Link>
+              </span>
+            </Col>
+            ) : (<></>)}
             <Col>
               <span>
                 <Nav.Link href="/profile">{`Profil`}</Nav.Link>
