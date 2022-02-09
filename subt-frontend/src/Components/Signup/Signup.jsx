@@ -32,6 +32,7 @@ const Signup = () => {
         id: user.user.uid,
         email: email,
         password: password,
+        role: "user",
       });
       handleLogout();
       navigate("/");
