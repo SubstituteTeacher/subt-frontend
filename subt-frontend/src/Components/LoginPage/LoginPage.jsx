@@ -60,46 +60,49 @@ const LoginPage = () => {
               <Form.Label className="text-white">{`Lösenord`}</Form.Label>
               <Form.Control
                 type="password"
-                placeholder="Password"
+                placeholder="Lösenord"
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Form.Group>
             {!loading ? (
-              <div className="">
-                <Button
-                  className="px-5"
-                  variant="primary"
-                  onClick={() => {
-                    setLoading(true);
-                    setShow(false);
-                    handleCredentials();
-                  }}
-                >
-                  {`Logga in`}
-                </Button>
-                <div className="text-white m-1">
-                  {`Har du inget konto?`}{" "}
-                  <Link to="/signup">{`Skapa konto`}</Link>
-                </div>
-                <div>
-                  <GoogleButton
-                    className="g-btn"
-                    type="dark"
-                    onClick={handleGoogleSignIn}
-                  />
-                </div>
-              </div>
-            ) : (
-              <Button variant="primary" className="px-4" disabled>
-                <Spinner
-                  as="span"
-                  animation="border"
-                  size="sm"
-                  role="status"
-                  aria-hidden="true"
-                />
-                &nbsp;&nbsp;{`Laddar...`}
-              </Button>
+               <div className="d-grid text-center">
+               <Button
+                 className="px-5"
+                 variant="primary"
+                 onClick={() => {
+                   setLoading(true);
+                   setShow(false);
+                   handleCredentials();
+                 }}
+               >
+                 {`Logga in`}
+               </Button>
+               <div className="text-white m-1">
+                 {`Har du inget konto?`}{" "}
+                 <Link to="/signup">{`Skapa konto`}</Link>
+               </div>
+               <div className="d-grid">
+                 <GoogleButton
+                   style={{ width: "100%" }}
+                   className="g-btn"
+                   type="dark"
+                   onClick={handleGoogleSignIn}
+                 />
+               </div>
+             </div>
+           ) : (
+             <div className="d-grid">
+               <Button variant="primary" className="px-4" disabled>
+                 <Spinner
+                   as="span"
+                   animation="border"
+                   size="sm"
+                   role="status"
+                   aria-hidden="true"
+                 />
+                 &nbsp;&nbsp;{`Laddar...`}
+               </Button>
+             </div>
             )}
           </Form>
         </Card.Body>
