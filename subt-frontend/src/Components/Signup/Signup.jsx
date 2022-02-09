@@ -12,7 +12,6 @@ const Signup = () => {
   const { signUp } = useUserAuth();
   let navigate = useNavigate();
 
-  const [users, setUsers] = useState([]);
   const usersCollectionRef = collection(db, "users");
 
   const handleSubmit = async (e) => {
