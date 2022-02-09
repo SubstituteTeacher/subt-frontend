@@ -7,7 +7,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-import { auth } from "../firebase.config";
+import { auth } from "../firebase-config";
 
 const userAuthContext = createContext();
 
@@ -41,14 +41,11 @@ export function UserAuthContextProvider({ children }) {
 
   return (
     <userAuthContext.Provider
-      value={{ user, logIn, signUp, logOut, googleSignIn }}
-    >
+      value={{ user, logIn, signUp, logOut, googleSignIn }}>
       {children}
     </userAuthContext.Provider>
   );
 }
-
-
 
 export function useUserAuth() {
   return useContext(userAuthContext);
