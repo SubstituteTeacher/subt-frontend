@@ -4,12 +4,14 @@ import { Form, Alert, Button, Card } from "react-bootstrap";
 import { useUserAuth } from "../../context/UserAuthContext";
 import { db } from "../../firebase-config";
 import { collection, addDoc } from "firebase/firestore";
+import { useEffect } from "react";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [password, setPassword] = useState("");
   const { signUp } = useUserAuth();
+  const [user, setUser] = useState();
   let navigate = useNavigate();
 
   const usersCollectionRef = collection(db, "users");
@@ -18,17 +20,30 @@ const Signup = () => {
     e.preventDefault();
     setError("");
     try {
-      await signUp(email, password);
-      navigate("/");
-      createUser(email, password);
+      setUser(await signUp(email, password));
     } catch (err) {
       setError(err.message);
     }
   };
   //create user and save to firestore
   const createUser = async () => {
-    await addDoc(usersCollectionRef, { email: email, password: password });
+    try {
+      await addDoc(usersCollectionRef, {
+        id: user.user.uid,
+        email: email,
+        password: password,
+      });
+      navigate("/");
+    } catch (err) {
+      setError(err.message);
+    }
   };
+
+  useEffect(() => {
+    if (user !== undefined) {
+      createUser();
+    }
+  });
 
   return (
     <div className="main d-flex justify-content-center">
