@@ -30,6 +30,7 @@ const Mainpage = () => {
   const [itemCardInfo, setTodoCardInfo] = useState([]);
   const { user } = useUserAuth();
   const [itemIndex, setItemIndex] = useState();
+  const [jobTimer, setJobtimer] = useState(10);
 
   const currentWindowDimensions = () => {
     const { innerWidth: width, innerHeight: height } = window;
@@ -70,6 +71,7 @@ const Mainpage = () => {
     });
     setTodoCardInfo(getPostsFromFirebase);
     setLoading(true);
+    setJobtimer(10);
     return () => querySnapshot();
   };
 
@@ -93,6 +95,45 @@ const Mainpage = () => {
     } catch (e) {
       console.log("Transaction failed: ", e);
     }
+  };
+
+  useEffect(() => {
+    if (jobTimer > 0)
+      setTimeout(() => {
+        setJobtimer(jobTimer - 1);
+      }, 1000);
+  }, [jobTimer]);
+
+  const showNoJobs = () => {
+    return (
+      <>
+        {jobTimer > 0 ? (
+          <Container
+            className="align-self-center m-5 text-center text-white"
+            fluid
+          >
+            <h1>
+              {" "}
+              <Spinner
+                as="span"
+                animation="border"
+                size="xl"
+                role="status"
+                aria-hidden="true"
+              />
+              {`Laddar jobb...`}
+            </h1>
+          </Container>
+        ) : (
+          <Container
+            className="align-self-center m-5 text-center text-white"
+            fluid
+          >
+            <h1>{`Inga jobb hittades...`}</h1>
+          </Container>
+        )}
+      </>
+    );
   };
 
   const renderJobs = (card, index) => {
@@ -271,33 +312,7 @@ const Mainpage = () => {
             </Container>
           </>
         ) : (
-          <>
-            {loading ? (
-              <Container
-                className="align-self-center m-5 text-center text-white"
-                fluid
-              >
-                <h1>
-                  {" "}
-                  <Spinner
-                    as="span"
-                    animation="border"
-                    size="xl"
-                    role="status"
-                    aria-hidden="true"
-                  />
-                  {`Laddar jobb...`}
-                </h1>
-              </Container>
-            ) : (
-              <Container
-                className="align-self-center m-5 text-center text-white"
-                fluid
-              >
-                <h1>{`Inga jobb hittades...`}</h1>
-              </Container>
-            )}
-          </>
+          <>{showNoJobs()}</>
         )}
       </div>
     </div>
