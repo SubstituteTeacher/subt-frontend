@@ -11,6 +11,7 @@ import Contact from "./Components/Contact/Contact"
 import Footer from "./Components/Footer/Footer"
 import Signup from "./Components/Signup/Signup";
 import Profile from "./Components/Profile/Profile";
+import ForgotPassword from "./Components/Password/FogotPassword";
 import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
 import { UserAuthContextProvider } from "./context/UserAuthContext";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -62,6 +63,7 @@ function App() {
           />
           <Route path="/" element={<LoginPage />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
         </Routes>
       </UserAuthContextProvider>
     </Router>

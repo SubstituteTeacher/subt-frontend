@@ -88,6 +88,9 @@ const LoginPage = () => {
                     onClick={handleGoogleSignIn}
                   />
                 </div>
+                <div className="p-8 box mt-3 text-center">
+                  <Link to="/forgot-password">Glömt lösenord?</Link>
+                  </div>
               </div>
             ) : (
               <Button variant="primary" className="px-4" disabled>
