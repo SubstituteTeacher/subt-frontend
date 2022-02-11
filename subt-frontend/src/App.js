@@ -11,7 +11,7 @@ import Contact from "./Components/Contact/Contact"
 import Footer from "./Components/Footer/Footer"
 import Signup from "./Components/Signup/Signup";
 import Profile from "./Components/Profile/Profile";
-import ForgotPassword from "./Components/Password/FogotPassword";
+import ForgotPassword from "./Components/Password/ForgotPassword";
 import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
 import { UserAuthContextProvider } from "./context/UserAuthContext";
 import 'bootstrap/dist/css/bootstrap.min.css';
