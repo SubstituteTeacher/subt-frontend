@@ -50,9 +50,9 @@ import "./AdminPage.css";
                             </Col>
                           </Row>
             
-                          {/* <Button
+                          <Button
                             className="card-btn mt-3 p-0"
-                            onClick={() => {
+                            /* onClick={() => {
                               setJobinfo({
                                 title: card.title,
                                 location: card.location,
@@ -67,8 +67,8 @@ import "./AdminPage.css";
                               if (windowDimensions.width < 768) {
                                 setIsMobile(true);
                               }
-                            }}
-                          >{`Information`}</Button> */}
+                            }} */
+                          >{`Ändra`}</Button>
                         </Card.Body>
                       </Card>
                     </Col>
