@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
   onAuthStateChanged,
   signOut,
   GoogleAuthProvider,
@@ -19,6 +20,9 @@ export function UserAuthContextProvider({ children }) {
   }
   function signUp(email, password) {
     return createUserWithEmailAndPassword(auth, email, password);
+  }
+  function resetPassword(email) {
+    return sendPasswordResetEmail(auth,email)
   }
   function logOut() {
     return signOut(auth);
@@ -41,7 +45,7 @@ export function UserAuthContextProvider({ children }) {
 
   return (
     <userAuthContext.Provider
-      value={{ user, logIn, signUp, logOut, googleSignIn }}>
+      value={{ user, logIn, signUp, logOut, googleSignIn, resetPassword }}>
       {children}
     </userAuthContext.Provider>
   );
