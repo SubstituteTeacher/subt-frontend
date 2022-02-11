@@ -65,6 +65,44 @@ const LoginPage = () => {
               />
             </Form.Group>
             {!loading ? (
+              <div className="">
+                <Button
+                  className="px-5"
+                  variant="primary"
+                  onClick={() => {
+                    setLoading(true);
+                    setShow(false);
+                    handleCredentials();
+                  }}
+                >
+                  {`Logga in`}
+                </Button>
+                <div className="text-white m-1">
+                  {`Har du inget konto?`}{" "}
+                  <Link to="/signup">{`Skapa konto`}</Link>
+                </div>
+                <div>
+                  <GoogleButton
+                    className="g-btn"
+                    type="dark"
+                    onClick={handleGoogleSignIn}
+                  />
+                </div>
+                <div className="p-8 box mt-3 text-center">
+                  <Link to="/forgot-password">Glömt lösenord?</Link>
+                  </div>
+              </div>
+            ) : (
+              <Button variant="primary" className="px-4" disabled>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />
+                &nbsp;&nbsp;{`Laddar...`}
+              </Button>
                <div className="d-grid text-center">
                <Button
                  className="px-5"
