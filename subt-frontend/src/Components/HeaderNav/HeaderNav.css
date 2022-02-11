@@ -26,19 +26,19 @@
   color: white !important;
   text-decoration: none;
 }
-a.nav-link {
+span a.nav-link {
   color: white;
   font-size: 20px;
   text-decoration: none !important;
   transition: all 0.3s ease-in-out;
   text-shadow: 1px 1px black;
 }
-a.nav-link:hover {
+span a.nav-link:hover {
   transform: scale(1.1, 1.1);
   text-shadow: 1px 1px black;
   color: white;
 }
-a.nav-link::after {
+span a.nav-link::after {
   content: "";
   border-radius: 10px;
   position: absolute;
@@ -52,10 +52,10 @@ a.nav-link::after {
   -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
   transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
 }
-a.nav-link:hover::after {
+span a.nav-link:hover::after {
   opacity: 1 !important;
 }
 
-a.nav-link:focus {
+span a.nav-link:focus {
   color: white;
 }

@@ -102,19 +102,29 @@ const HeaderNav = () => {
         ) : (
           <Col xs={10} lg={8} className="d-flex m-auto">
             <Col>
-              <Nav.Link href="/main">{`Hem`}</Nav.Link>
+              <span>
+                <Nav.Link href="/main">{`Hem`}</Nav.Link>
+              </span>
             </Col>
             <Col>
-              <Nav.Link href="/profile">{`Profil`}</Nav.Link>
+              <span>
+                <Nav.Link href="/profile">{`Profil`}</Nav.Link>
+              </span>
             </Col>
             <Col>
-              <Nav.Link href="/about">{`Om oss`}</Nav.Link>
+              <span>
+                <Nav.Link href="/about">{`Om oss`}</Nav.Link>
+              </span>
             </Col>
             <Col>
-              <Nav.Link href="/contact">{`Kontakt`}</Nav.Link>
+              <span>
+                <Nav.Link href="/contact">{`Kontakt`}</Nav.Link>
+              </span>
             </Col>
             <Col>
-              <Nav.Link onClick={() => handleLogout()}>{`Logga ut`}</Nav.Link>
+              <span>
+                <Nav.Link onClick={() => handleLogout()}>{`Logga ut`}</Nav.Link>
+              </span>
             </Col>
           </Col>
         )}

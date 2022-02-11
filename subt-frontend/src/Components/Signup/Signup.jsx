@@ -3,32 +3,56 @@ import { Link, useNavigate } from "react-router-dom";
 import { Form, Alert, Button, Card } from "react-bootstrap";
 import { useUserAuth } from "../../context/UserAuthContext";
 import { db } from "../../firebase-config";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, setDoc, doc } from "firebase/firestore";
+import { useEffect } from "react";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [password, setPassword] = useState("");
-  const { signUp } = useUserAuth();
+  const { signUp, logOut } = useUserAuth();
+  const [user, setUser] = useState();
   let navigate = useNavigate();
-
-  const usersCollectionRef = collection(db, "users");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     try {
-      await signUp(email, password);
-      navigate("/");
-      createUser(email, password);
+      setUser(await signUp(email, password));
     } catch (err) {
       setError(err.message);
     }
   };
   //create user and save to firestore
   const createUser = async () => {
-    await addDoc(usersCollectionRef, { email: email, password: password });
+    try {
+      const usersCollectionRef = collection(db, "users");
+      await setDoc(doc(usersCollectionRef, user.user.uid),{
+        id: user.user.uid,
+        email: email,
+        password: password,
+        role: "user",
+      });
+      handleLogout();
+      navigate("/");
+    } catch (err) {
+      setError(err.message);
+    }
   };
+
+  const handleLogout = async () => {
+    try {
+      await logOut();
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  useEffect(() => {
+    if (user !== undefined) {
+      createUser();
+    }
+  });
 
   return (
     <div className="main d-flex justify-content-center">

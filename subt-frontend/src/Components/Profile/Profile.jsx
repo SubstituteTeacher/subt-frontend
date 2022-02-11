@@ -1,4 +1,6 @@
 import { Container, Col, Row, Button } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Profile.css";
 
 const Profile = () => {
@@ -8,21 +10,54 @@ const Profile = () => {
       firstname: "Bengan",
       surname: "Bengalsson",
       age: "1982-01-01",
-      email: "asd@hotmail.com",
+      email: "marcus.94.richardson@gmail.com",
       phone: "072-419 22 22",
       bankAccount: "1234-12341112",
       bank: "Glasbanken",
       username: "BengalBengan82",
       password: "asd",
+      sex: "Male",
     },
   ];
+  const navigate = useNavigate();
+
+  const currentWindowDimensions = () => {
+    const { innerWidth: width, innerHeight: height } = window;
+    return {
+      width,
+      height,
+    };
+  };
+  const [windowDimensions, setWindowDimensions] = useState(
+    currentWindowDimensions()
+  );
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimensions(currentWindowDimensions());
+    }
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const renderName = (person, index) => {
     return (
       <div key={index}>
-        <Row>
-          <h1 style={{ fontSize: "80px" }}>{`${person.firstname}`}</h1>
-          <h1 style={{ fontSize: "80px" }}>{`${person.surname}`}</h1>
+        <Row style={{ display: "grid", justifyContent: "center" }}>
+          <h1
+            style={
+              windowDimensions.width > 650
+                ? { fontSize: "80px" }
+                : { fontSize: "50px" }
+            }
+          >{`${person.firstname}`}</h1>
+          <h1
+            style={
+              windowDimensions.width > 650
+                ? { fontSize: "80px" }
+                : { fontSize: "50px" }
+            }
+          >{`${person.surname}`}</h1>
         </Row>
       </div>
     );
@@ -30,74 +65,48 @@ const Profile = () => {
 
   const renderInfo = (info, index) => {
     return (
-      <div key={index} style={{ textAlign: "left" }}>
-        <Row>
+      <Col className="d-flex" key={index}>
+        <Col xs={3} sm={5} lg={3} style={{ textAlign: "end" }}>
           <Col>
-            <h4>&nbsp;&nbsp;{`${info.email}`}</h4>
+            <h4>{`Email`}&nbsp;</h4>
           </Col>
-        </Row>
-        <Row>
           <Col>
-            <h4>&nbsp;&nbsp;{`${info.username}`}</h4>
+            <h4>{`Användare`}&nbsp;</h4>
           </Col>
-        </Row>
-        <Row>
           <Col>
-            <h4>&nbsp;&nbsp;{`${info.bankAccount}`}</h4>
+            <h4>{`Bankkonto`}&nbsp;</h4>
           </Col>
-        </Row>
-        <Row>
           <Col>
-            <h4>&nbsp;&nbsp;{`${info.bank}`}</h4>
+            <h4>{`Bank`}&nbsp;</h4>
           </Col>
-        </Row>
-        <Row>
           <Col>
-            <h4>&nbsp;&nbsp;{`${info.age}`}</h4>
+            <h4>{`Född`}&nbsp;</h4>
           </Col>
-        </Row>
-        <Row>
           <Col>
-            <h4>&nbsp;&nbsp;{`${info.phone}`}</h4>
+            <h4>{`Telefon`}&nbsp;</h4>
           </Col>
-        </Row>
-      </div>
-    );
-  };
-  const renderParams = () => {
-    return (
-      <div style={{ textAlign: "end" }}>
-        <Row>
+        </Col>
+        <Col xs={9} sm={6} lg={9} style={{ textAlign: "left" }}>
           <Col>
-            <h4>{`Email`}&nbsp;&nbsp;</h4>
+            <h4>&nbsp;{`${info.email}`}</h4>
           </Col>
-        </Row>
-        <Row>
           <Col>
-            <h4>{`Användarnamn`}&nbsp;&nbsp;</h4>
+            <h4>&nbsp;{`${info.username}`}</h4>
           </Col>
-        </Row>
-        <Row>
           <Col>
-            <h4>{`Bankkonto`}&nbsp;&nbsp;</h4>
+            <h4>&nbsp;{`${info.bankAccount}`}</h4>
           </Col>
-        </Row>
-        <Row>
           <Col>
-            <h4>{`Bank`}&nbsp;&nbsp;</h4>
+            <h4>&nbsp;{`${info.bank}`}</h4>
           </Col>
-        </Row>
-        <Row>
           <Col>
-            <h4>{`Född`}&nbsp;&nbsp;</h4>
+            <h4>&nbsp;{`${info.age}`}</h4>
           </Col>
-        </Row>
-        <Row>
           <Col>
-            <h4>{`Telefon`}&nbsp;&nbsp;</h4>
+            <h4>&nbsp;{`${info.phone}`}</h4>
           </Col>
-        </Row>
-      </div>
+        </Col>
+      </Col>
     );
   };
 
@@ -111,9 +120,7 @@ const Profile = () => {
         >
           <Row className="mx-auto h-100">
             <Col md={12} lg={6} className="align-self-center">
-              <Container fluid>
-                <Col>{tempInfo.map(renderName)}</Col>
-              </Container>
+              <Container>{tempInfo.map(renderName)}</Container>
             </Col>
             <Col
               lg={6}
@@ -125,21 +132,29 @@ const Profile = () => {
                 <Col></Col>
                 <Col style={{ textAlign: "start" }}>
                   &nbsp;&nbsp;
-                  <Button>{`Inställningar`}</Button>
+                  <Button
+                    variant="primary"
+                    onClick={() => {
+                      navigate("/profile/settings");
+                    }}
+                  >{`Inställningar`}</Button>
                   &nbsp;
                   <Button>{`Statistik`}</Button>
                 </Col>
               </Col>
-              <Col xs={12} className="d-flex mb-5">
-                <Col xs={6}>{renderParams()}</Col>
-                <Col xs={6}>{tempInfo.map(renderInfo)}</Col>
+              <Col xs={12} className="d-flex mb-5 overflow-auto">
+                <Col className="d-flex">{tempInfo.map(renderInfo)}</Col>
               </Col>
               <Col xs={12} className="d-lg-none">
                 <Col style={{ textAlign: "center" }}>
-                  &nbsp;&nbsp;
-                  <Button>{`Inställningar`}</Button>
+                  <Button
+                    variant="primary"
+                    onClick={() => {
+                      navigate("/profile/settings");
+                    }}
+                  >{`Inställningar`}</Button>
                   &nbsp;
-                  <Button>{`Statistik`}</Button>
+                  <Button variant="primary">{`Statistik`}</Button>
                 </Col>
               </Col>
             </Col>
