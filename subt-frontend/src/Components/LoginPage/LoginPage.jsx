@@ -74,8 +74,7 @@ const LoginPage = () => {
                     setLoading(true);
                     setShow(false);
                     handleCredentials();
-                  }}
-                >
+                  }}>
                   {`Logga in`}
                 </Button>
                 <div className="text-white m-1 text-center">
@@ -92,22 +91,22 @@ const LoginPage = () => {
                 </div>
                 <div className="p-8 box mt-2 text-center">
                   <Link to="/forgot-password">Glömt lösenord?</Link>
-                  </div>
+                </div>
               </div>
             ) : (
               <div className="d-grid">
-              <Button variant="primary" className="px-4" disabled>
-                <Spinner
-                  as="span"
-                  animation="border"
-                  size="sm"
-                  role="status"
-                  aria-hidden="true"
-                />
-                &nbsp;&nbsp;{`Laddar...`}
-              </Button>
-             </div>
-               )}
+                <Button variant="primary" className="px-4" disabled>
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                  &nbsp;&nbsp;{`Laddar...`}
+                </Button>
+              </div>
+            )}
           </Form>
         </Card.Body>
         {show ? (
