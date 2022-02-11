@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Form, Alert, Button, Card } from "react-bootstrap";
 import { useUserAuth } from "../../context/UserAuthContext";
 import { db } from "../../firebase-config";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, setDoc, doc } from "firebase/firestore";
 import { useEffect } from "react";
 
 const Signup = () => {
@@ -13,8 +13,6 @@ const Signup = () => {
   const { signUp, logOut } = useUserAuth();
   const [user, setUser] = useState();
   let navigate = useNavigate();
-
-  const usersCollectionRef = collection(db, "users");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,7 +26,8 @@ const Signup = () => {
   //create user and save to firestore
   const createUser = async () => {
     try {
-      await addDoc(usersCollectionRef, {
+      const usersCollectionRef = collection(db, "users");
+      await setDoc(doc(usersCollectionRef, user.user.uid),{
         id: user.user.uid,
         email: email,
         password: password,
