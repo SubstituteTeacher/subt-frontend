@@ -6,75 +6,31 @@ import {
   Card,
   Button,
   Modal,
-  Form,
-  OverlayTrigger,
-  Tooltip,
+  Spinner,
 } from "react-bootstrap";
 import { useState, useEffect } from "react";
+import { db } from "../../firebase-config";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  runTransaction,
+  doc,
+} from "@firebase/firestore";
+import { useUserAuth } from "../../context/UserAuthContext";
 
 const Mainpage = () => {
   const [show, setShow] = useState(false);
   const [modalShow, setModalShow] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const handleCheck = () => setIsChecked((current) => !current);
   const handleModalShow = () => setModalShow((current) => !current);
   const handleShow = () => setShow((current) => !current);
-  const [overtime, setOvertime] = useState(false);
-  const [extraHours, setExtraHours] = useState();
-  const date = new Date();
-  const [jobInfo, setJobinfo] = useState({
-    title: "",
-    location: "",
-    schoolName: "",
-    class: "",
-    date: "",
-    timeStart: "",
-    timeEnd: "",
-    text: "",
-  });
-  const tempJobs = [
-    {
-      title: "Pedagog till lågstadiet sökes",
-      location: "Göteborg",
-      schoolName: "KrampSkolan",
-      class: "Pedagogik",
-      date: "2022-01-31",
-      timeStart: "11.00",
-      timeEnd: "17.00",
-      text: "Pedagogiken skall förbättras får åk 1-3 i krampskolan. Du skall göra dom bättre genom pedagogik.",
-    },
-    {
-      title: "TDD EXPERT",
-      location: "Göteborg",
-      schoolName: "Newton",
-      class: "TDD",
-      date: "2022-02-03",
-      timeStart: "08.00",
-      timeEnd: "16.00",
-      text: "Gå igenom hela testramverket och examinera genom en quiz. Skriven utav dig själv.",
-    },
-    {
-      title: "Förskolelärare",
-      location: "Göteborg",
-      schoolName: "RosaKnatten",
-      class: "Sovtimmen",
-      date: "2022-05-14",
-      timeStart: "12.00",
-      timeEnd: "13.00",
-      text: "Håll koll på ungarna när dom sover.",
-    },
-    {
-      title: "Gymnastiklärare till högstadiet",
-      location: "Göteborg",
-      schoolName: "HögaStadiet",
-      class: "Gymnastik",
-      date: "2022-06-02",
-      timeStart: "10.00",
-      timeEnd: "14.00",
-      text: "Planera en bollsportlektion på 4 timmar. Ha så kul.",
-    },
-  ];
+  const [loading, setLoading] = useState(true);
+  const [itemCardInfo, setTodoCardInfo] = useState([]);
+  const { user } = useUserAuth();
+  const [itemIndex, setItemIndex] = useState();
+  const [jobTimer, setJobtimer] = useState(10);
 
   const currentWindowDimensions = () => {
     const { innerWidth: width, innerHeight: height } = window;
@@ -101,6 +57,84 @@ const Mainpage = () => {
       setIsMobile(false);
     }
   }, [show, windowDimensions.width]);
+
+  const getTaskItems = async () => {
+    const getPostsFromFirebase = [];
+    const querySnapshot = await getDocs(
+      query(collection(db, "Tasks"), where("isAssigned", "==", false))
+    );
+    querySnapshot.forEach((doc) => {
+      getPostsFromFirebase.push({
+        ...doc.data(),
+        id: doc.id,
+      });
+    });
+    setTodoCardInfo(getPostsFromFirebase);
+    setLoading(true);
+    setJobtimer(10);
+    return () => querySnapshot();
+  };
+
+  useEffect(() => {
+    getTaskItems();
+  }, [loading]);
+
+  const handleAssignment = async () => {
+    const sfDocRef = doc(db, "Tasks", itemCardInfo[itemIndex].id);
+    try {
+      await runTransaction(db, async (transaction) => {
+        const sfDoc = await transaction.get(sfDocRef);
+        if (!sfDoc.exists()) {
+          throw "Document does not exist!";
+        }
+        transaction.update(sfDocRef, { isAssigned: true, userId: user.uid });
+      });
+      handleShow();
+      setLoading(false);
+      console.log("Transaction successfully committed!");
+    } catch (e) {
+      console.log("Transaction failed: ", e);
+    }
+  };
+
+  useEffect(() => {
+    if (jobTimer > 0)
+      setTimeout(() => {
+        setJobtimer(jobTimer - 1);
+      }, 1000);
+  }, [jobTimer]);
+
+  const showNoJobs = () => {
+    return (
+      <>
+        {jobTimer > 0 ? (
+          <Container
+            className="align-self-center m-5 text-center text-white"
+            fluid
+          >
+            <h1>
+              {" "}
+              <Spinner
+                as="span"
+                animation="border"
+                size="xl"
+                role="status"
+                aria-hidden="true"
+              />
+              {`Laddar jobb...`}
+            </h1>
+          </Container>
+        ) : (
+          <Container
+            className="align-self-center m-5 text-center text-white"
+            fluid
+          >
+            <h1>{`Inga jobb hittades...`}</h1>
+          </Container>
+        )}
+      </>
+    );
+  };
 
   const renderJobs = (card, index) => {
     return (
@@ -131,20 +165,10 @@ const Mainpage = () => {
                   <Card.Text className="text-nowrap">{card.date}</Card.Text>
                 </Col>
               </Row>
-
               <Button
                 className="card-btn mt-3 p-0"
                 onClick={() => {
-                  setJobinfo({
-                    title: card.title,
-                    location: card.location,
-                    schoolName: card.schoolName,
-                    class: card.class,
-                    date: card.date,
-                    timeStart: card.timeStart,
-                    timeEnd: card.timeEnd,
-                    text: card.text,
-                  });
+                  setItemIndex(index);
                   setShow(true);
                   if (windowDimensions.width < 768) {
                     setIsMobile(true);
@@ -161,140 +185,135 @@ const Mainpage = () => {
   return (
     <div id="mainpage-background">
       <div className="mainpage-opacity d-flex">
-        <Modal
-          show={modalShow}
-          onHide={handleModalShow}
-          backdrop="static"
-          keyboard={false}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>{`Rapportera`}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <Form.Group>
-                <p className="m-auto">{`Tidsrapportering*`}</p>
-                <Form.Select
-                  aria-label="Default select example"
-                  onChange={(e) => {
-                    if (e.target.value === "overtime") setOvertime(true);
-                    else setOvertime(false);
-                  }}
-                >
-                  <option>{`${jobInfo.timeStart} - ${jobInfo.timeEnd}`}</option>
-                  <option value="overtime">{`Övertid`}</option>
-                </Form.Select>
-                {overtime ? (
-                  <div className="mt-2">
-                    <p className="m-auto">{`Övertidstimmar*`}</p>
-                    <Form.Select
-                      aria-label="Default select example"
-                      onChange={(e) => {
-                        setExtraHours(e.target.value);
-                      }}
-                    >
-                      <option value="15">{`15min`}</option>
-                      <option value="30">{`30min`}</option>
-                      <option value="45">{`45min`}</option>
-                      <option value="60">{`60min`}</option>
-                      <option value="90">{`90min`}</option>
-                      <option value="120">{`120min`}</option>
-                    </Form.Select>
-                  </div>
+        {!!itemCardInfo.length ? (
+          <>
+            <Modal
+              show={modalShow}
+              onHide={handleModalShow}
+              backdrop="static"
+              keyboard={false}
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>{`Information`}</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                {itemIndex !== undefined ? (
+                  <Card>
+                    <Card.Body>
+                      <Card.Text>
+                        <strong>{`Skola: `}</strong>
+                        {itemCardInfo[itemIndex].schoolName}
+                      </Card.Text>
+                      <Card.Text>
+                        <strong>{`Stad: `}</strong>
+                        {itemCardInfo[itemIndex].location}
+                      </Card.Text>
+                      <Card.Text>
+                        <strong>{`Kurs: `}</strong>
+                        {itemCardInfo[itemIndex].class}
+                      </Card.Text>
+                      <Card.Text>
+                        <strong>{`Datum: `}</strong>
+                        {itemCardInfo[itemIndex].date}
+                      </Card.Text>
+                      <Card.Text>
+                        <strong>{`Tid: `}</strong>
+                        {`${itemCardInfo[itemIndex].timeStart}-${itemCardInfo[itemIndex].timeEnd}`}
+                      </Card.Text>
+                      <Card.Text>
+                        <strong>{`Beskrivning: `}</strong>
+                        {itemCardInfo[itemIndex].text}
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
                 ) : (
                   <></>
                 )}
-              </Form.Group>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer className="justify-content-between">
-            <Form.Group>
-              <Form.Check
-                type="checkbox"
-                checked={isChecked}
-                label={`Jag är sjuk och kan inte komma`}
-                onChange={() => {
-                  handleCheck();
-                }}
-              />
-            </Form.Group>
-            <OverlayTrigger
-              overlay={
-                !(
-                  isChecked ||
-                  (date.toLocaleTimeString() > jobInfo.timeEnd &&
-                    date.toLocaleDateString() >= jobInfo.date)
-                ) ? (
-                  <Tooltip id="tooltip-disabled">
-                    {`Du kan endast rapportera om du är sjuk, eller lektionen avslutats`}
-                  </Tooltip>
-                ) : (
-                  <></>
-                )
-              }
-            >
-              <span className="d-inline-block">
+              </Modal.Body>
+              <Modal.Footer className="justify-content-between">
+                <p style={{ fontStyle: "italic", textAlign: "start" }}>
+                  {`Är du säker på att du vill tacka ja?`}
+                </p>
                 <Button
                   variant="primary"
-                  onClick={() => handleModalShow()}
-                  disabled={
-                    !(
-                      isChecked ||
-                      (date.toLocaleTimeString() > jobInfo.timeEnd &&
-                        date.toLocaleDateString() >= jobInfo.date)
-                    )
-                  }
+                  style={{ width: "15%" }}
+                  onClick={() => {
+                    handleModalShow();
+                    handleAssignment();
+                  }}
                 >
-                  {`Skicka rapport`}
+                  {`Ja`}
                 </Button>
-              </span>
-            </OverlayTrigger>
-          </Modal.Footer>
-        </Modal>
-        <Container className="job-container align-self-center m-5" fluid>
-          <Row className="mx-auto">
-            {isMobile ? (
-              <></>
-            ) : (
-              <Col className="todo overflow-auto" sm={12} md={6}>
-                <h1 className="text-white text-center">{`TODO'S`}</h1>
-                <div>{tempJobs.map(renderJobs)}</div>
-              </Col>
-            )}
-            <Col>
-              {show ? (
-                <div
-                  className="text-white jobinfo-box "
-                  style={{ textShadow: "1px 1px black" }}
+                <Button
+                  variant="primary"
+                  style={{ width: "15%" }}
+                  onClick={() => handleModalShow()}
                 >
-                  <h1>{jobInfo.title}</h1>
-                  <h3>{`Skola: ${jobInfo.schoolName} - ${jobInfo.location}`}</h3>
-                  <h4>{`Kurs: ${jobInfo.class}`}</h4>
-                  <h4>{`Datum: ${jobInfo.date}`}</h4>
-                  <h4>{`Tid: ${jobInfo.timeStart} - ${jobInfo.timeEnd}`}</h4>
-                  <p>{`${jobInfo.text}`}</p>
-                  <br />
-                  <div>
-                    <Button
-                      variant="primary"
-                      onClick={() => setModalShow(true)}
-                    >{`Rapportera`}</Button>
-                    <Button
-                      className="m-1"
-                      variant="secondary"
-                      onClick={() => {
-                        handleShow();
-                        setIsMobile(false);
-                      }}
-                    >{`stäng`}</Button>
-                  </div>
-                </div>
-              ) : (
-                <></>
-              )}
-            </Col>
-          </Row>
-        </Container>
+                  {`Nej`}
+                </Button>
+              </Modal.Footer>
+            </Modal>
+            <Container className="align-self-center m-5" fluid>
+              <Row className="mx-auto mt-5">
+                {isMobile ? (
+                  <></>
+                ) : (
+                  <>
+                    <Col sm={12} md={6}>
+                      <h1 className="text-white text-center">{`Tillgängliga jobb`}</h1>
+                    </Col>
+                    <Col></Col>
+                  </>
+                )}
+              </Row>
+              <Row className="mx-auto">
+                {isMobile ? (
+                  <></>
+                ) : (
+                  <Col className="todo overflow-auto" sm={12} md={6}>
+                    <div>{itemCardInfo.map(renderJobs)}</div>
+                  </Col>
+                )}
+                <Col>
+                  {show && itemIndex !== undefined ? (
+                    <div
+                      className="text-white jobinfo-box "
+                      style={{ textShadow: "1px 1px black" }}
+                    >
+                      <h1>{itemCardInfo[itemIndex].title}</h1>
+                      <h3>{`Skola: ${itemCardInfo[itemIndex].schoolName} - ${itemCardInfo[itemIndex].location}`}</h3>
+                      <h4>{`Kurs: ${itemCardInfo[itemIndex].class}`}</h4>
+                      <h4>{`Datum: ${itemCardInfo[itemIndex].date}`}</h4>
+                      <h4>{`Tid: ${itemCardInfo[itemIndex].timeStart} - ${itemCardInfo[itemIndex].timeEnd}`}</h4>
+                      <p>{`${itemCardInfo[itemIndex].text}`}</p>
+                      <br />
+                      <div>
+                        <Button
+                          variant="primary"
+                          onClick={() => {
+                            handleModalShow();
+                          }}
+                        >{`Tacka ja`}</Button>
+                        <Button
+                          className="m-1"
+                          variant="secondary"
+                          onClick={() => {
+                            handleShow();
+                            setIsMobile(false);
+                          }}
+                        >{`stäng`}</Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                </Col>
+              </Row>
+            </Container>
+          </>
+        ) : (
+          <>{showNoJobs()}</>
+        )}
       </div>
     </div>
   );
