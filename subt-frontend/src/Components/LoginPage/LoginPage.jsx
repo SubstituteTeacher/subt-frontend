@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button, Card, Form, Spinner } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import GoogleButton from "react-google-button";
@@ -67,14 +67,15 @@ const LoginPage = () => {
             {!loading ? (
               <div className="">
                 <Button
-                style={{ width: "100%" }}
+                  style={{ width: "100%" }}
                   className="px-5"
                   variant="primary"
                   onClick={() => {
                     setLoading(true);
                     setShow(false);
                     handleCredentials();
-                  }}>
+                  }}
+                >
                   {`Logga in`}
                 </Button>
                 <div className="text-white m-1 text-center">
@@ -83,7 +84,7 @@ const LoginPage = () => {
                 </div>
                 <div>
                   <GoogleButton
-                  style={{ width: "100%" }}
+                    style={{ width: "100%" }}
                     className="g-btn"
                     type="dark"
                     onClick={handleGoogleSignIn}
@@ -111,15 +112,15 @@ const LoginPage = () => {
         </Card.Body>
         {show ? (
           <Card className="error">
-          <Card.Header className="text-center">
-          <p className="text-warning m-0">
-          {`Fel användarnamn eller lösenord`}
-          </p>
-          </Card.Header>
+            <Card.Header className="text-center">
+              <p className="text-warning m-0">
+                {`Fel användarnamn eller lösenord`}
+              </p>
+            </Card.Header>
           </Card>
-          ) : (
-            <></>
-            )}
+        ) : (
+          <></>
+        )}
       </Card>
     </div>
   );
