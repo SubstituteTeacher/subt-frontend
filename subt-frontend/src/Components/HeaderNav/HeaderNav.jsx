@@ -3,12 +3,47 @@ import { useEffect, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { ImCross } from "react-icons/im";
 import { useUserAuth } from "../../context/UserAuthContext";
+import { db } from "../../firebase-config";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  runTransaction,
+  doc,
+} from "@firebase/firestore";
 import "./HeaderNav.css";
 
 const HeaderNav = () => {
   const [isOpen, setIsOpen] = useState(false);
   const handleOpen = () => setIsOpen((current) => !current);
-  const { logOut } = useUserAuth();
+  const { logOut, user } = useUserAuth();
+  const [loading, setLoading] = useState(true);
+  const [todoCardInfo, setTodoCardInfo] = useState([]);
+
+  const getTaskItems = async () => {
+    const getPostsFromFirebase = [];
+    const querySnapshot = await getDocs(
+      query(collection(db, "users"), where("email", "==", user.email))
+    );
+    querySnapshot.forEach((doc) => {
+      getPostsFromFirebase.push({
+        ...doc.data(),
+        id: doc.id,
+      });
+    });
+
+    setTodoCardInfo(getPostsFromFirebase);
+    setLoading(false);
+    console.log(todoCardInfo);
+    return () => querySnapshot();
+  };
+
+  useEffect(() => {
+    if (loading === true) {
+      getTaskItems();
+    }
+  });
 
   const handleLogout = async () => {
     try {
@@ -71,6 +106,19 @@ const HeaderNav = () => {
                     <Col>
                       <a href="/main">{`Hem`}</a>
                     </Col>
+                    {!!todoCardInfo.length ? (
+                      <>
+                        {todoCardInfo[0].role === "admin" ? (
+                          <Col>
+                            <a href="/admin">{`Användare`}</a>
+                          </Col>
+                        ) : (
+                          <></>
+                        )}
+                      </>
+                    ) : (
+                      <></>
+                    )}
                     <Col>
                       <a href="/profile">{`Profil`}</a>
                     </Col>
@@ -106,6 +154,21 @@ const HeaderNav = () => {
                 <Nav.Link href="/main">{`Hem`}</Nav.Link>
               </span>
             </Col>
+            {!!todoCardInfo.length ? (
+              <>
+                {todoCardInfo[0].role === "admin" ? (
+                  <Col>
+                    <span>
+                      <Nav.Link href="/admin">{`Användare`}</Nav.Link>
+                    </span>
+                  </Col>
+                ) : (
+                  <></>
+                )}
+              </>
+            ) : (
+              <></>
+            )}
             <Col>
               <span>
                 <Nav.Link href="/profile">{`Profil`}</Nav.Link>

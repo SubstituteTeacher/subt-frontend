@@ -4,6 +4,7 @@ import {
 } from "react-router-dom";
 import "./App.css";
 import Mainpage from "./Components/Mainpage/Mainpage";
+import AdminPage from "./Components/AdminPage/AdminPage";
 import LoginPage from "./Components/LoginPage/LoginPage";
 import HeaderNav from "./Components/HeaderNav/HeaderNav";
 import About from "./Components/About/About"
@@ -28,6 +29,16 @@ function App() {
               <ProtectedRoute>
                 <HeaderNav />
                 <Mainpage />
+                <Footer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <HeaderNav />
+                <AdminPage />
                 <Footer />
               </ProtectedRoute>
             }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Card, Form, Spinner } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import GoogleButton from "react-google-button";
@@ -67,6 +67,7 @@ const LoginPage = () => {
             {!loading ? (
               <div className="">
                 <Button
+                style={{ width: "100%" }}
                   className="px-5"
                   variant="primary"
                   onClick={() => {
@@ -76,18 +77,19 @@ const LoginPage = () => {
                   }}>
                   {`Logga in`}
                 </Button>
-                <div className="text-white m-1">
+                <div className="text-white m-1 text-center">
                   {`Har du inget konto?`}{" "}
                   <Link to="/signup">{`Skapa konto`}</Link>
                 </div>
                 <div>
                   <GoogleButton
+                  style={{ width: "100%" }}
                     className="g-btn"
                     type="dark"
                     onClick={handleGoogleSignIn}
                   />
                 </div>
-                <div className="p-8 box mt-3 text-center">
+                <div className="p-8 box mt-2 text-center">
                   <Link to="/forgot-password">Glömt lösenord?</Link>
                 </div>
               </div>
@@ -103,58 +105,21 @@ const LoginPage = () => {
                   />
                   &nbsp;&nbsp;{`Laddar...`}
                 </Button>
-                <div className="d-grid text-center">
-                  <Button
-                    className="px-5"
-                    variant="primary"
-                    onClick={() => {
-                      setLoading(true);
-                      setShow(false);
-                      handleCredentials();
-                    }}>
-                    {`Logga in`}
-                  </Button>
-                  <div className="text-white m-1">
-                    {`Har du inget konto?`}{" "}
-                    <Link to="/signup">{`Skapa konto`}</Link>
-                  </div>
-                  <div className="d-grid">
-                    <GoogleButton
-                      style={{ width: "100%" }}
-                      className="g-btn"
-                      type="dark"
-                      onClick={handleGoogleSignIn}
-                    />
-                  </div>
-                </div>
-                ) : (
-                <div className="d-grid">
-                  <Button variant="primary" className="px-4" disabled>
-                    <Spinner
-                      as="span"
-                      animation="border"
-                      size="sm"
-                      role="status"
-                      aria-hidden="true"
-                    />
-                    &nbsp;&nbsp;{`Laddar...`}
-                  </Button>
-                </div>
               </div>
             )}
           </Form>
         </Card.Body>
         {show ? (
           <Card className="error">
-            <Card.Header className="text-center">
-              <p className="text-warning m-0">
-                {`Fel användarnamn eller lösenord`}
-              </p>
-            </Card.Header>
+          <Card.Header className="text-center">
+          <p className="text-warning m-0">
+          {`Fel användarnamn eller lösenord`}
+          </p>
+          </Card.Header>
           </Card>
-        ) : (
-          <></>
-        )}
+          ) : (
+            <></>
+            )}
       </Card>
     </div>
   );
