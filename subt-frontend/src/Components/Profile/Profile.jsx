@@ -13,7 +13,15 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../firebase-config";
-import { collection, getDocs, query, where } from "@firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  addDoc,
+  updateDoc,
+  doc,
+} from "@firebase/firestore";
 import { useUserAuth } from "../../context/UserAuthContext";
 import "./Profile.css";
 
@@ -23,7 +31,8 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [isChecked, setIsChecked] = useState(false);
   const [overtime, setOvertime] = useState(false);
-  const [extraHours, setExtraHours] = useState();
+  const [isWorkComplete, setIsWorkComplete] = useState(false);
+  const [extraHours, setExtraHours] = useState(0);
   const [itemIndex, setItemIndex] = useState();
   const [todoCardInfo, setTodoCardInfo] = useState([]);
   const { user } = useUserAuth();
@@ -47,8 +56,17 @@ const Profile = () => {
       });
     });
 
+    let count = 0;
+    getPostsFromFirebase.map((val) => {
+      if (val.isDone) count = count + 1;
+      return count;
+    });
+    if (count === getPostsFromFirebase.length) {
+      setIsWorkComplete(true);
+    }
     setTodoCardInfo(getPostsFromFirebase);
     setLoading(false);
+
     return () => querySnapshot();
   };
   useEffect(() => {
@@ -57,45 +75,73 @@ const Profile = () => {
     }
   });
 
+  const updateTask = async () => {
+    const docRef = doc(db, "Tasks", todoCardInfo[itemIndex].id);
+    await updateDoc(docRef, {
+      isDone: true,
+    });
+  };
+
+  const createReport = async () => {
+    try {
+      const usersCollectionRef = collection(db, "reports");
+      await addDoc(usersCollectionRef, {
+        taskId: todoCardInfo[itemIndex].id,
+        userId: user.uid,
+        overtime: extraHours,
+        reportSick: isChecked,
+      });
+      setLoading(true);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const renderJobs = (card, index) => {
     return (
       <Row className="mt-4" key={index}>
-        <Col xs={12}>
-          <Card className="card-display">
-            <Card.Body className="d-flex flex-column ">
-              <Card.Title className="mb-3">{card.title}</Card.Title>
-              <Row>
-                <Col className="d-none d-xl-block">{`Plats`}</Col>
-                <Col>{`Skola`}</Col>
-                <Col className="d-none d-xl-block d-lg-block d-sm-block d-md-none">{`Kurs`}</Col>
-                <Col>{`Datum`}</Col>
-              </Row>
-              <Row>
-                <Col className="d-none d-xl-block">
-                  <Card.Text className="text-nowrap">{card.location}</Card.Text>
-                </Col>
-                <Col>
-                  <Card.Text className="text-nowrap">
-                    {card.schoolName}
-                  </Card.Text>
-                </Col>
-                <Col className="d-none d-xl-block d-lg-block d-sm-block d-md-none">
-                  <Card.Text className="text-nowrap">{card.class}</Card.Text>
-                </Col>
-                <Col>
-                  <Card.Text className="text-nowrap">{card.date}</Card.Text>
-                </Col>
-              </Row>
-              <Button
-                className="card-btn mt-3 p-0"
-                onClick={() => {
-                  setItemIndex(index);
-                  setShow(true);
-                }}
-              >{`Information`}</Button>
-            </Card.Body>
-          </Card>
-        </Col>
+        {!card.isDone ? (
+          <Col xs={12}>
+            <Card className="card-display">
+              <Card.Body className="d-flex flex-column ">
+                <Card.Title className="mb-3">{card.title}</Card.Title>
+                <Row>
+                  <Col className="d-none d-xl-block">{`Plats`}</Col>
+                  <Col>{`Skola`}</Col>
+                  <Col className="d-none d-xl-block d-lg-block d-sm-block d-md-none">{`Kurs`}</Col>
+                  <Col>{`Datum`}</Col>
+                </Row>
+                <Row>
+                  <Col className="d-none d-xl-block">
+                    <Card.Text className="text-nowrap">
+                      {card.location}
+                    </Card.Text>
+                  </Col>
+                  <Col>
+                    <Card.Text className="text-nowrap">
+                      {card.schoolName}
+                    </Card.Text>
+                  </Col>
+                  <Col className="d-none d-xl-block d-lg-block d-sm-block d-md-none">
+                    <Card.Text className="text-nowrap">{card.class}</Card.Text>
+                  </Col>
+                  <Col>
+                    <Card.Text className="text-nowrap">{card.date}</Card.Text>
+                  </Col>
+                </Row>
+                <Button
+                  className="card-btn mt-3 p-0"
+                  onClick={() => {
+                    setItemIndex(index);
+                    setShow(true);
+                  }}
+                >{`Information`}</Button>
+              </Card.Body>
+            </Card>
+          </Col>
+        ) : (
+          <></>
+        )}
       </Row>
     );
   };
@@ -275,7 +321,12 @@ const Profile = () => {
                 <span className="d-inline-block">
                   <Button
                     variant="primary"
-                    onClick={() => handleModalShow()}
+                    onClick={() => {
+                      updateTask();
+                      createReport();
+                      handleModalShow();
+                      handleShow();
+                    }}
                     disabled={
                       !(
                         isChecked ||
@@ -295,7 +346,7 @@ const Profile = () => {
             )}
           </Modal.Footer>
         </Modal>
-        {!!todoCardInfo.length ? (
+        {!!todoCardInfo.length && !isWorkComplete ? (
           <Container className="align-self-center m-5" fluid>
             <Row className="mx-auto mt-5">
               <>
