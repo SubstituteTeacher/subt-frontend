@@ -4,30 +4,30 @@ import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import "./AdminPage.css";
 
+function AdminPage() {
+  const [users, setUsers] = useState([]);
+  const usersCollectionRef = collection(db, "users");
 
-    function AdminPage() {
-        const [users, setUsers] = useState([]);
-        const usersCollectionRef = collection(db, "users");
+  const getUsers = async () => {
+    const data = await getDocs(usersCollectionRef);
+    setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    return () => data();
+  };
 
-        useEffect(() => {
-            const getUsers = async () => {
-                const data = await getDocs(usersCollectionRef);
-                setUsers(data.docs.map((doc) => ({...doc.data(), id: doc.id})))
-            };
+  useEffect(() => {
+    getUsers();
+  });
 
-            getUsers();
-        }, []);
-
-        return (
-            <div id="adminpage-background">
-              <div className="adminpage-opacity text-white align-items-center d-flex">
-              <Container className="job-container align-self-center m-5" fluid>
+  return (
+    <div id="adminpage-background">
+      <div className="adminpage-opacity text-white align-items-center d-flex">
+        <Container className="job-container align-self-center m-5" fluid>
           <Row className="mx-auto">
-              <Col className="todo overflow-auto" sm={12} md={6}>
-                <h1 className="text-white text-center">{`ANVÄNDARE`}</h1>
-            {users.map((user) => {
+            <Col className="todo overflow-auto" sm={12} md={6}>
+              <h1 className="text-white text-center">{`ANVÄNDARE`}</h1>
+              {users.map((user, index) => {
                 return (
-                    <Row className="mb-4">
+                  <Row className="mb-4" key={index}>
                     <Col className="text-black" xs={12}>
                       <Card className="card-display">
                         <Card.Body className="d-flex flex-column ">
@@ -38,7 +38,9 @@ import "./AdminPage.css";
                           </Row>
                           <Row>
                             <Col className="d-none d-xl-block">
-                              <Card.Text className="text-nowrap">{user.email}</Card.Text>
+                              <Card.Text className="text-nowrap">
+                                {user.email}
+                              </Card.Text>
                             </Col>
                             <Col>
                               <Card.Text className="text-nowrap">
@@ -46,10 +48,12 @@ import "./AdminPage.css";
                               </Card.Text>
                             </Col>
                             <Col className="d-none d-xl-block d-lg-block d-sm-block d-md-none">
-                              <Card.Text className="text-nowrap">{user.role}</Card.Text>
+                              <Card.Text className="text-nowrap">
+                                {user.role}
+                              </Card.Text>
                             </Col>
                           </Row>
-            
+
                           <Button
                             className="card-btn mt-3 p-0"
                             /* onClick={() => {
@@ -74,13 +78,13 @@ import "./AdminPage.css";
                     </Col>
                   </Row>
                 );
-            })}
+              })}
             </Col>
-            </Row>
-            </Container>
-            </div>
-            </div>
-
-        )}
+          </Row>
+        </Container>
+      </div>
+    </div>
+  );
+}
 
 export default AdminPage;

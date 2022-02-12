@@ -9,3 +9,12 @@
   background: rgba(0, 0, 0, 0.3);
   height: 100vh;
 }
+
+.todo-profile {
+  min-height: 75vh;
+  max-height: 75vh;
+  width: 60vw !important;
+  overflow: auto;
+  margin: auto;
+  /* display: flex; */
+}

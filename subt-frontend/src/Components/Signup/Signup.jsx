@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Form, Alert, Button, Card } from "react-bootstrap";
 import { useUserAuth } from "../../context/UserAuthContext";
 import { db } from "../../firebase-config";
-import { collection, addDoc, setDoc, doc } from "firebase/firestore";
+import { collection, setDoc, doc } from "firebase/firestore";
 import { useEffect } from "react";
 
 const Signup = () => {
@@ -27,7 +27,7 @@ const Signup = () => {
   const createUser = async () => {
     try {
       const usersCollectionRef = collection(db, "users");
-      await setDoc(doc(usersCollectionRef, user.user.uid),{
+      await setDoc(doc(usersCollectionRef, user.user.uid), {
         id: user.user.uid,
         email: email,
         password: password,

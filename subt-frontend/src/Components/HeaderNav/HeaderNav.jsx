@@ -4,14 +4,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { ImCross } from "react-icons/im";
 import { useUserAuth } from "../../context/UserAuthContext";
 import { db } from "../../firebase-config";
-import {
-  collection,
-  getDocs,
-  query,
-  where,
-  runTransaction,
-  doc,
-} from "@firebase/firestore";
+import { collection, getDocs, query, where } from "@firebase/firestore";
 import "./HeaderNav.css";
 
 const HeaderNav = () => {
@@ -35,12 +28,11 @@ const HeaderNav = () => {
 
     setTodoCardInfo(getPostsFromFirebase);
     setLoading(false);
-    console.log(todoCardInfo);
     return () => querySnapshot();
   };
 
   useEffect(() => {
-    if (loading === true) {
+    if (loading === true && !!user.email) {
       getTaskItems();
     }
   });
