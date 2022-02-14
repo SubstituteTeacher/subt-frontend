@@ -1,86 +1,113 @@
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
-import { db } from "../../firebase-config";
-import { collection, getDocs } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { Button, Card, Col, Container, Nav, Offcanvas } from "react-bootstrap";
+import { useState } from "react";
+import { BsFillGrid3X3GapFill } from "react-icons/bs";
+import UserList from "./Subs/UserList/UserList";
+import TaskManager from "./Subs/TaskManager/TaskManager";
+
+import Reports from "./Subs/Reports/Reports";
 import "./AdminPage.css";
 
 function AdminPage() {
-  const [users, setUsers] = useState([]);
-  const usersCollectionRef = collection(db, "users");
+  const [select, setSelect] = useState("");
+  const [show, setShow] = useState(false);
+  const handleShow = () => setShow((current) => !current);
 
-  const getUsers = async () => {
-    const data = await getDocs(usersCollectionRef);
-    setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    return () => data();
+  const selectComponent = (comp) => {
+    switch (comp) {
+      case "user":
+        return <UserList />;
+      case "task":
+        return <TaskManager />;
+      case "report":
+        return <Reports />;
+      case "??":
+        return <h1>??</h1>;
+      default:
+        return <h1>woop</h1>;
+    }
   };
-
-  useEffect(() => {
-    getUsers();
-  });
-
   return (
     <div id="adminpage-background">
       <div className="adminpage-opacity text-white align-items-center d-flex">
-        <Container className="job-container align-self-center m-5" fluid>
-          <Row className="mx-auto">
-            <Col className="todo overflow-auto" sm={12} md={6}>
-              <h1 className="text-white text-center">{`ANVÄNDARE`}</h1>
-              {users.map((user, index) => {
-                return (
-                  <Row className="mb-4" key={index}>
-                    <Col className="text-black" xs={12}>
-                      <Card className="card-display">
-                        <Card.Body className="d-flex flex-column ">
-                          <Row>
-                            <Col className="d-none d-xl-block">{`Email`}</Col>
-                            <Col>{`Lösenord`}</Col>
-                            <Col className="d-none d-xl-block d-lg-block d-sm-block d-md-none">{`Roll`}</Col>
-                          </Row>
-                          <Row>
-                            <Col className="d-none d-xl-block">
-                              <Card.Text className="text-nowrap">
-                                {user.email}
-                              </Card.Text>
-                            </Col>
-                            <Col>
-                              <Card.Text className="text-nowrap">
-                                {user.password}
-                              </Card.Text>
-                            </Col>
-                            <Col className="d-none d-xl-block d-lg-block d-sm-block d-md-none">
-                              <Card.Text className="text-nowrap">
-                                {user.role}
-                              </Card.Text>
-                            </Col>
-                          </Row>
+        <Container className="mt-5" fluid>
+          <Card className="admin-main-card">
+            <div>
+              <Card.Body className="text-white" style={{ textAlign: "left" }}>
+                {show ? (
+                  <></>
+                ) : (
+                  <Button variant="primary" onClick={() => handleShow()}>
+                    <BsFillGrid3X3GapFill size={25} />
+                  </Button>
+                )}
 
-                          <Button
-                            className="card-btn mt-3 p-0"
-                            /* onClick={() => {
-                              setJobinfo({
-                                title: card.title,
-                                location: card.location,
-                                schoolName: card.schoolName,
-                                class: card.class,
-                                date: card.date,
-                                timeStart: card.timeStart,
-                                timeEnd: card.timeEnd,
-                                text: card.text,
-                              });
-                              setShow(true);
-                              if (windowDimensions.width < 768) {
-                                setIsMobile(true);
-                              }
-                            }} */
-                          >{`Ändra`}</Button>
-                        </Card.Body>
-                      </Card>
+                <Offcanvas
+                  show={show}
+                  onHide={() => setShow(false)}
+                  keyboard={true}
+                  scroll={true}
+                  style={{
+                    backgroundColor: "rgba(0, 0, 0, 0.7)",
+                  }}
+                >
+                  <Offcanvas.Header closeButton>
+                    <Offcanvas.Title className="text-white">
+                      {`Admin properties`}
+                    </Offcanvas.Title>
+                  </Offcanvas.Header>
+                  <Offcanvas.Body>
+                    <Col xs={10} className=" m-auto">
+                      <Col>
+                        <Nav.Link
+                          className="edit-btn"
+                          onClick={() => {
+                            handleShow();
+                            setSelect("user");
+                          }}
+                        >
+                          <h4>{`Användare`}</h4>
+                        </Nav.Link>
+                      </Col>
+                      <Col>
+                        <Nav.Link
+                          className="edit-btn"
+                          onClick={() => {
+                            handleShow();
+                            setSelect("task");
+                          }}
+                        >
+                          <h4>{`Arbetskort`}</h4>
+                        </Nav.Link>
+                      </Col>
+                      <Col>
+                        <Nav.Link
+                          className="edit-btn"
+                          onClick={() => {
+                            handleShow();
+                            setSelect("report");
+                          }}
+                        >
+                          <h4>{`Rapporter`}</h4>
+                        </Nav.Link>
+                      </Col>
+                      <Col>
+                        <Nav.Link
+                          className="edit-btn"
+                          onClick={() => {
+                            handleShow();
+                            setSelect("??");
+                          }}
+                        >
+                          <h4>{`????`}</h4>
+                        </Nav.Link>
+                      </Col>
                     </Col>
-                  </Row>
-                );
-              })}
-            </Col>
-          </Row>
+                  </Offcanvas.Body>
+                </Offcanvas>
+                {selectComponent(select)}
+              </Card.Body>
+            </div>
+          </Card>
         </Container>
       </div>
     </div>

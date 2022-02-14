@@ -277,7 +277,7 @@ const Mainpage = () => {
                 <Col>
                   {show && itemIndex !== undefined ? (
                     <div
-                      className="text-white jobinfo-box "
+                      className="text-white"
                       style={{ textShadow: "1px 1px black" }}
                     >
                       <h1>{itemCardInfo[itemIndex].title}</h1>
