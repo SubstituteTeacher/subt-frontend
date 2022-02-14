@@ -23,6 +23,7 @@ import {
   doc,
 } from "@firebase/firestore";
 import { useUserAuth } from "../../context/UserAuthContext";
+import ProfileSettings from "./ProfileSettings/ProfileSettings";
 import "./Profile.css";
 
 const Profile = () => {
@@ -38,6 +39,7 @@ const Profile = () => {
   const { user } = useUserAuth();
   const [jobTimer, setJobtimer] = useState(3);
   const date = new Date();
+  const [showSettings, setShowSettings] = useState(false);
 
   const navigate = useNavigate();
   const handleModalShow = () => setModalShow((current) => !current);
@@ -174,7 +176,7 @@ const Profile = () => {
                   <Button
                     variant="primary"
                     onClick={() => {
-                      navigate("/profile/settings");
+                      setShowSettings(true);
                     }}
                   >{`Inställningar`}</Button>
                   &nbsp;
@@ -216,7 +218,7 @@ const Profile = () => {
                   <Button
                     variant="primary"
                     onClick={() => {
-                      navigate("/profile/settings");
+                      setShowSettings(true);
                     }}
                   >{`Inställningar`}</Button>
                   &nbsp;
@@ -234,7 +236,7 @@ const Profile = () => {
       </>
     );
   };
-
+console.log(user.uid);
   return (
     <div id="profile-background">
       <div className="profile-opacity  align-items-center d-flex">
@@ -346,80 +348,101 @@ const Profile = () => {
             )}
           </Modal.Footer>
         </Modal>
-        {!!todoCardInfo.length && !isWorkComplete ? (
-          <Container className="align-self-center m-5" fluid>
-            <Row className="mx-auto mt-5">
-              <>
-                {!show ? (
-                  <>
-                    <Col
-                      xs={12}
-                      style={{
-                        textAlign: "end",
-                        width: "60vw",
-                        margin: "auto",
-                      }}
-                    >
-                      <h1 className="text-white text-center">{`TODO'S`}</h1>
-                      <Col>
-                        <span style={{ textAlign: "end" }}>
-                          <Button
-                            variant="primary"
-                            onClick={() => {
-                              navigate("/profile/settings");
-                            }}
-                          >{`Inställningar`}</Button>
-                          &nbsp;
-                          <Button>{`Statistik`}</Button>
-                        </span>
-                      </Col>
-                    </Col>
-                    <Col xs={12} className="todo-profile">
-                      <div>{todoCardInfo.map(renderJobs)}</div>
-                    </Col>
-                  </>
-                ) : (
-                  <Col>
-                    {show && itemIndex !== undefined ? (
-                      <div
-                        className="text-white todo-profile d-flex"
-                        style={{ textShadow: "1px 1px black" }}
-                      >
-                        <div className="m-auto">
-                          <h1>{todoCardInfo[itemIndex].title}</h1>
-                          <h3>{`Skola: ${todoCardInfo[itemIndex].schoolName} - ${todoCardInfo[itemIndex].location}`}</h3>
-                          <h4>{`Kurs: ${todoCardInfo[itemIndex].class}`}</h4>
-                          <h4>{`Datum: ${todoCardInfo[itemIndex].date}`}</h4>
-                          <h4>{`Tid: ${todoCardInfo[itemIndex].timeStart} - ${todoCardInfo[itemIndex].timeEnd}`}</h4>
-                          <p>{`${todoCardInfo[itemIndex].text}`}</p>
-                          <br />
-                          <div>
-                            <Button
-                              variant="primary"
-                              onClick={() => {
-                                handleModalShow();
-                              }}
-                            >{`Rapportera`}</Button>
-                            <Button
-                              className="m-1"
-                              variant="secondary"
-                              onClick={() => {
-                                handleShow();
-                              }}
-                            >{`stäng`}</Button>
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <></>
-                    )}
-                  </Col>
-                )}
-              </>
-            </Row>
-          </Container>
+        {showSettings ? (
+          <>
+            <div
+              className="text-white text-center"
+              style={{
+                minHeight: "75vh",
+                maxHeight: "75vh",
+                width: "60vw",
+                margin: "auto",
+              }}
+            >
+              <div className="m-auto">
+                <ProfileSettings props={user.uid} />
+              </div>
+              <Button className="mt-5" onClick={() => setShowSettings(false)}>{`stäng`}</Button>
+            </div>
+          </>
         ) : (
-          <>{showNoJobs()}</>
+          <>
+            {!!todoCardInfo.length && !isWorkComplete ? (
+              <Container className="align-self-center m-5" fluid>
+                <Row className="mx-auto mt-5">
+                  <>
+                    {!show ? (
+                      <>
+                        <Col
+                          xs={12}
+                          style={{
+                            textAlign: "end",
+                            width: "60vw",
+                            margin: "auto",
+                          }}
+                        >
+                          <h1 className="text-white text-center">{`TODO'S`}</h1>
+                          <Col>
+                            <span style={{ textAlign: "end" }}>
+                              <Button
+                                variant="primary"
+                                onClick={() => {
+                                  setShowSettings(true);
+                                }}
+                              >{`Inställningar`}</Button>
+                              &nbsp;
+                              <Button>{`Statistik`}</Button>
+                            </span>
+                          </Col>
+                        </Col>
+                        <Col xs={12} className="todo-profile">
+                          <div>{todoCardInfo.map(renderJobs)}</div>
+                        </Col>
+                      </>
+                    ) : (
+                      <Col>
+                        {show && itemIndex !== undefined ? (
+                          <div
+                            className="text-white todo-profile d-flex"
+                            style={{ textShadow: "1px 1px black" }}
+                          >
+                            <div className="m-auto">
+                              <h1>{todoCardInfo[itemIndex].title}</h1>
+                              <h3>{`Skola: ${todoCardInfo[itemIndex].schoolName} - ${todoCardInfo[itemIndex].location}`}</h3>
+                              <h4>{`Kurs: ${todoCardInfo[itemIndex].class}`}</h4>
+                              <h4>{`Datum: ${todoCardInfo[itemIndex].date}`}</h4>
+                              <h4>{`Tid: ${todoCardInfo[itemIndex].timeStart} - ${todoCardInfo[itemIndex].timeEnd}`}</h4>
+                              <p>{`${todoCardInfo[itemIndex].text}`}</p>
+                              <br />
+                              <div>
+                                <Button
+                                  variant="primary"
+                                  onClick={() => {
+                                    handleModalShow();
+                                  }}
+                                >{`Rapportera`}</Button>
+                                <Button
+                                  className="m-1"
+                                  variant="secondary"
+                                  onClick={() => {
+                                    handleShow();
+                                  }}
+                                >{`stäng`}</Button>
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                      </Col>
+                    )}
+                  </>
+                </Row>
+              </Container>
+            ) : (
+              <>{showNoJobs()}</>
+            )}
+          </>
         )}
       </div>
     </div>
