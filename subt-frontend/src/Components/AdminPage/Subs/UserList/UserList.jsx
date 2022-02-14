@@ -1,6 +1,7 @@
-import { Button, Card, Col, Row } from "react-bootstrap";
+import { Button, Card, Col, Row, Nav, Modal } from "react-bootstrap";
 import { db } from "../../../../firebase-config";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { ImCross } from "react-icons/im";
 import { useEffect, useState } from "react";
 
 const UserList = () => {
@@ -9,6 +10,8 @@ const UserList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [itemIndex, setItemIndex] = useState(0);
   const usersCollectionRef = collection(db, "users");
+  const [modalShow, setModalShow] = useState(false);
+  const handleModalShow = () => setModalShow((current) => !current);
 
   const handleShow = () => setShow((current) => !current);
   const getUsers = async () => {
@@ -16,6 +19,11 @@ const UserList = () => {
     setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     setIsLoading(false);
     return () => data();
+  };
+
+  const deleteUser = async (id) => {
+    await deleteDoc(doc(db, "users", id));
+    setIsLoading(true);
   };
 
   useEffect(() => {
@@ -30,6 +38,19 @@ const UserList = () => {
         <Col className="text-black" xs={12}>
           <Card className="card-display">
             <Card.Body className="d-flex flex-column ">
+              <Card.Title className="mb-1 justify-content-between d-flex">
+                <span>{card.title}</span>
+                <Nav.Link>
+                  <ImCross
+                    size={20}
+                    className="delete-task p-0"
+                    onClick={() => {
+                      setItemIndex(index);
+                      handleModalShow();
+                    }}
+                  />
+                </Nav.Link>
+              </Card.Title>
               <Row>
                 <Col className="d-none d-xl-block">{`Email`}</Col>
                 <Col>{`Lösenord`}</Col>
@@ -62,38 +83,95 @@ const UserList = () => {
   };
 
   return (
-    <Row className="mx-auto">
-      {!show ? (
-        <>
-          <Col
-            xs={12}
-            style={{
-              width: "60vw",
-              margin: "auto",
-            }}
-          >
-            <h1 className="text-white text-center">{`ANVÄNDARE`}</h1>
-          </Col>
-          <Col className="todo-profile" sm={12}>
-            {users.map(renderUsers)}
-          </Col>
-        </>
-      ) : (
-        <Col>
-          {show && itemIndex !== undefined ? (
-            <div
-              className="text-white todo-profile d-flex"
-              style={{ textShadow: "1px 1px black" }}
-            >
-              <div className="m-auto">{`Här kan det finnas data ${users[itemIndex].email}`}</div>
-              <Button onClick={() => handleShow()}>{`stäng`}</Button>
-            </div>
+    <>
+      <Modal
+        show={modalShow}
+        onHide={handleModalShow}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>{`RADERA ANVÄNDARE`}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {itemIndex !== undefined && !!users.length ? (
+            <Card>
+              <Card.Body>
+                <Card.Text>
+                  <strong>{`Email: `}</strong>
+                  {users[itemIndex].email}
+                </Card.Text>
+                <Card.Text>
+                  <strong>{`Lösenord: `}</strong>
+                  {users[itemIndex].password}
+                </Card.Text>
+                <Card.Text>
+                  <strong>{`Roll: `}</strong>
+                  {users[itemIndex].role}
+                </Card.Text>
+              </Card.Body>
+            </Card>
           ) : (
             <></>
           )}
-        </Col>
-      )}
-    </Row>
+        </Modal.Body>
+        <Modal.Footer className="justify-content-between">
+          <p style={{ fontStyle: "italic", textAlign: "start" }}>
+            {`Är du säker på att du vill radera kontot?`}
+          </p>
+          <Button
+            variant="primary"
+            style={{ width: "15%" }}
+            onClick={() => {
+              //  DELETE FUNKTION
+              deleteUser(users[itemIndex].id);
+              handleModalShow();
+            }}
+          >
+            {`Ja`}
+          </Button>
+          <Button
+            variant="primary"
+            style={{ width: "15%" }}
+            onClick={() => handleModalShow()}
+          >
+            {`Nej`}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Row className="mx-auto">
+        {!show ? (
+          <>
+            <Col
+              xs={12}
+              style={{
+                width: "60vw",
+                margin: "auto",
+              }}
+            >
+              <h1 className="text-white text-center">{`ANVÄNDARE`}</h1>
+            </Col>
+            <Col className="todo-profile" sm={12}>
+              {users.map(renderUsers)}
+            </Col>
+          </>
+        ) : (
+          <Col>
+            {show && itemIndex !== undefined ? (
+              <div
+                className="text-white todo-profile d-flex"
+                style={{ textShadow: "1px 1px black" }}
+              >
+                <div className="m-auto">{`Här kan det finnas data ${users[itemIndex].email}`}</div>
+                <Button onClick={() => handleShow()}>{`stäng`}</Button>
+              </div>
+            ) : (
+              <></>
+            )}
+          </Col>
+        )}
+      </Row>
+    </>
   );
 };
 export default UserList;
