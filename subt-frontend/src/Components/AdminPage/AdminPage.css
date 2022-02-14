@@ -1,19 +1,28 @@
 #adminpage-background {
-    background-image: url(https://www.cornerstone.se/globalassets/amnesomraden/windows-infrastruktur/windows-powershell-automating-administration.jpg?width=1370&mode=crop&heightratio=0.6345&quality=80);
-    background-position: center;
-    background-size: cover;
-    height: 100vh;
-  }
-  
-  .adminpage-opacity {
-    background: rgba(0, 0, 0, 0.3);
-    height: 100vh;
-  }
+  background-image: url(https://www.cornerstone.se/globalassets/amnesomraden/windows-infrastruktur/windows-powershell-automating-administration.jpg?width=1370&mode=crop&heightratio=0.6345&quality=80);
+  background-position: center;
+  background-size: cover;
+  height: 100vh;
+}
 
-  .card-display {
-    margin: auto;
-    border-radius: 10px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-    transition: all 0.3s ease-in-out;
-    background-color: rgba(255, 255, 255, 0.822) !important;
-  }
+.adminpage-opacity {
+  background: rgba(0, 0, 0, 0.3);
+  height: 100vh;
+}
+
+.card-display {
+  margin: auto;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease-in-out;
+  background-color: rgba(255, 255, 255, 0.822) !important;
+}
+
+.admin-main-card {
+  background-color: rgba(0, 0, 0, 0) !important;
+  border: none !important;
+  width: 95vw !important;
+  height: 91vh;
+  margin: auto;
+  overflow: auto;
+}
