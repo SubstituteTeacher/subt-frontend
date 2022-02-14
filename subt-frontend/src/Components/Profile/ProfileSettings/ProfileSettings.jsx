@@ -8,7 +8,6 @@ import {
   Nav,
   Collapse,
 } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { db } from "../../../firebase-config";
 import {
@@ -23,7 +22,6 @@ import { useUserAuth } from "../../../context/UserAuthContext";
 import "./ProfileSettings.css";
 
 const ProfileSettings = (props) => {
-  const navigate = useNavigate();
   const [open, setOpen] = useState("");
 
   const headers = {
@@ -62,7 +60,7 @@ const ProfileSettings = (props) => {
   const [loading, setLoading] = useState(true);
   const { user } = useUserAuth();
 
-  console.log(props)
+  console.log(props);
   const getUserInfo = async () => {
     const getPostsFromFirebase = [];
     const querySnapshot = await getDocs(
@@ -236,11 +234,13 @@ const ProfileSettings = (props) => {
             onClick={() => {
               setData(header, data);
               setOpen("");
-            }}>{`Spara`}</Button>
+            }}
+          >{`Spara`}</Button>
           &nbsp;
           <Button
             variant="secondary"
-            onClick={() => setOpen("")}>{`Stäng`}</Button>
+            onClick={() => setOpen("")}
+          >{`Stäng`}</Button>
         </Col>
       </div>
     );
@@ -267,7 +267,8 @@ const ProfileSettings = (props) => {
                       aria-expanded={open}
                       onClick={() => {
                         setOpen(index);
-                      }}>
+                      }}
+                    >
                       <h5>{`Redigera`}</h5>
                     </Nav.Link>
                   </Col>
@@ -291,28 +292,29 @@ const ProfileSettings = (props) => {
   };
 
   return (
-        <Container
-          className="text-center h-75"
-          fluid
-          style={{ textShadow: "2px 2px black" }}>
-          <Row className="mx-auto h-100 align-content-center">
-            <Card className="information-card">
-              <Card.Header className="text-center">
-                <h2 className="text-white">{`Allmänna kontoinställningar`}</h2>
-              </Card.Header>
-              <div className="solid">
-                <Card.Body className="text-white" style={{ textAlign: "left" }}>
-                  {renderRows()}
-                </Card.Body>
-              </div>
-            </Card>
-          </Row>
-          {/* <Button
+    <Container
+      className="text-center h-75"
+      fluid
+      style={{ textShadow: "2px 2px black" }}
+    >
+      <Row className="mx-auto h-100 align-content-center">
+        <Card className="information-card">
+          <Card.Header className="text-center">
+            <h2 className="text-white">{`Allmänna kontoinställningar`}</h2>
+          </Card.Header>
+          <div className="solid">
+            <Card.Body className="text-white" style={{ textAlign: "left" }}>
+              {renderRows()}
+            </Card.Body>
+          </div>
+        </Card>
+      </Row>
+      {/* <Button
             variant="primary"
             onClick={() => {
               navigate("/profile");
             }}>{`Tillbaka`}</Button> */}
-        </Container>
+    </Container>
   );
 };
 export default ProfileSettings;

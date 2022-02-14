@@ -1,4 +1,4 @@
-import { Button, Card, Col, Row, Nav, Modal } from "react-bootstrap";
+import { Button, Card, Col, Row } from "react-bootstrap";
 import { db } from "../../../../firebase-config";
 import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
@@ -24,7 +24,7 @@ const TaskManager = () => {
     }
   });
 
-  const renderTasks = (data, index) => {
+  const renderReports = (data, index) => {
     return (
       <Col key={index} className="d-flex text-white">
         {index > 0 ? (
@@ -78,7 +78,7 @@ const TaskManager = () => {
                     <Col xs={1} className="text-center">{`Övertid`}</Col>
                   </Col>
                   <Col xs={12} className="mt-2">
-                    {reports.map(renderTasks)}
+                    {reports.map(renderReports)}
                   </Col>
                 </Card.Body>
               </Card>

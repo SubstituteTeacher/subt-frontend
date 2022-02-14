@@ -11,7 +11,6 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { db } from "../../firebase-config";
 import {
   collection,
@@ -41,7 +40,6 @@ const Profile = () => {
   const date = new Date();
   const [showSettings, setShowSettings] = useState(false);
 
-  const navigate = useNavigate();
   const handleModalShow = () => setModalShow((current) => !current);
   const handleShow = () => setShow((current) => !current);
   const handleCheck = () => setIsChecked((current) => !current);
@@ -236,7 +234,7 @@ const Profile = () => {
       </>
     );
   };
-console.log(user.uid);
+  console.log(user.uid);
   return (
     <div id="profile-background">
       <div className="profile-opacity  align-items-center d-flex">
@@ -362,7 +360,10 @@ console.log(user.uid);
               <div className="m-auto">
                 <ProfileSettings props={user.uid} />
               </div>
-              <Button className="mt-5" onClick={() => setShowSettings(false)}>{`stäng`}</Button>
+              <Button
+                className="mt-5"
+                onClick={() => setShowSettings(false)}
+              >{`stäng`}</Button>
             </div>
           </>
         ) : (

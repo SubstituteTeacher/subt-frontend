@@ -1,21 +1,37 @@
 import { Button, Card, Col, Row, Nav, Modal } from "react-bootstrap";
 import { db } from "../../../../firebase-config";
-import { collection, getDocs } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { ImCross } from "react-icons/im";
+import { MdDeleteOutline, MdModeEditOutline, MdAddBox } from "react-icons/md";
+import { AiFillEye } from "react-icons/ai";
 import "./TaskManager.css";
+import AddTaskView from "./AddTaskView/AddTaskView";
 
 const TaskManager = () => {
   const [tasks, setTasks] = useState([]);
+  const [addTask, setAddTask] = useState(false);
   const [show, setShow] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [itemIndex, setItemIndex] = useState(0);
   const [modalShow, setModalShow] = useState(false);
+  const [user, setUser] = useState([]);
   const handleModalShow = () => setModalShow((current) => !current);
   const handleShow = () => setShow((current) => !current);
 
-  const tasksCollectionRef = collection(db, "Tasks");
+  const deleteTask = async (id) => {
+    await deleteDoc(doc(db, "Tasks", id));
+    setIsLoading(true);
+  };
+
   const getTasks = async () => {
+    const tasksCollectionRef = collection(db, "Tasks");
     const data = await getDocs(tasksCollectionRef);
     setTasks(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     setIsLoading(false);
@@ -28,58 +44,65 @@ const TaskManager = () => {
     }
   });
 
-  const renderJobs = (card, index) => {
+  const getUser = async (id) => {
+    const getPostsFromFirebase = [];
+    const querySnapshot = await getDocs(
+      query(collection(db, "users"), where("id", "==", id))
+    );
+    querySnapshot.forEach((doc) => {
+      getPostsFromFirebase.push({
+        ...doc.data(),
+        id: doc.id,
+      });
+      setUser(getPostsFromFirebase);
+    });
+  };
+
+  const renderTasks = (data, index) => {
     return (
-      <Row className="mb-4" key={index}>
-        <Col xs={12}>
-          <Card className="card-display">
-            <Card.Body className="d-flex flex-column ">
-              <Card.Title className="mb-3 justify-content-between d-flex">
-                <span>{card.title}</span>
-                <Nav.Link>
-                  <ImCross
-                    size={20}
-                    className="delete-task p-0"
-                    onClick={() => {
-                      setItemIndex(index);
-                      handleModalShow();
-                    }}
-                  />
-                </Nav.Link>
-              </Card.Title>
-              <Row>
-                <Col className="d-none d-xl-block">{`Plats`}</Col>
-                <Col>{`Skola`}</Col>
-                <Col className="d-none d-xl-block d-lg-block d-sm-block d-md-none">{`Kurs`}</Col>
-                <Col>{`Datum`}</Col>
-              </Row>
-              <Row>
-                <Col className="d-none d-xl-block">
-                  <Card.Text className="text-nowrap">{card.location}</Card.Text>
-                </Col>
-                <Col>
-                  <Card.Text className="text-nowrap">
-                    {card.schoolName}
-                  </Card.Text>
-                </Col>
-                <Col className="d-none d-xl-block d-lg-block d-sm-block d-md-none">
-                  <Card.Text className="text-nowrap">{card.class}</Card.Text>
-                </Col>
-                <Col>
-                  <Card.Text className="text-nowrap">{card.date}</Card.Text>
-                </Col>
-              </Row>
-              <Button
-                className="card-btn mt-3 p-0"
-                onClick={() => {
-                  setItemIndex(index);
-                  setShow(true);
-                }}
-              >{`Information`}</Button>
-            </Card.Body>
-          </Card>
+      <Col key={index} className="d-flex text-white">
+        <Col xs={2}>
+          <h6>{data.schoolName}</h6>
         </Col>
-      </Row>
+        <Col xs={2}>
+          <h6>{data.location}</h6>
+        </Col>
+        <Col xs={3}>
+          <h6>{data.class}</h6>
+        </Col>
+        <Col xs={2}>
+          <h6>{data.date}</h6>
+        </Col>
+        <Col xs={2}>
+          <h6>{`${data.timeStart}-${data.timeEnd}`}</h6>
+        </Col>
+        <Col className="d-flex text-white">
+          <Nav.Link
+            style={{ padding: "0", color: "white" }}
+            onClick={() => {
+              setItemIndex(index);
+              getUser(data.userId);
+              handleShow();
+            }}
+          >
+            <AiFillEye size={25} />
+          </Nav.Link>
+          &nbsp;
+          <Nav.Link style={{ padding: "0", color: "white" }}>
+            <MdModeEditOutline size={25} />
+          </Nav.Link>
+          &nbsp;
+          <Nav.Link
+            style={{ padding: "0", color: "white" }}
+            onClick={() => {
+              setItemIndex(index);
+              handleModalShow();
+            }}
+          >
+            <MdDeleteOutline size={25} />
+          </Nav.Link>
+        </Col>
+      </Col>
     );
   };
 
@@ -136,7 +159,7 @@ const TaskManager = () => {
             variant="primary"
             style={{ width: "15%" }}
             onClick={() => {
-              //  DELETE FUNKTION
+              deleteTask(tasks[itemIndex].id);
               handleModalShow();
             }}
           >
@@ -151,6 +174,9 @@ const TaskManager = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+      {addTask && (
+        <AddTaskView setAddTask={setAddTask} setIsLoading={setIsLoading} />
+      )}
       <Row className="mx-auto">
         {!show ? (
           <>
@@ -163,20 +189,105 @@ const TaskManager = () => {
             >
               <h1 className="text-white text-center">{`JOBB`}</h1>
             </Col>
-            <Col className="todo-profile text-black" sm={12}>
-              {tasks.map(renderJobs)}
-            </Col>
+            <Row className="mx-auto h-100 align-content-center">
+              <Card className="information-card">
+                <Card.Body className="text-white">
+                  <Col className="text-end">
+                    <Nav.Link
+                      style={{ padding: "0", color: "white" }}
+                      onClick={() => {
+                        setAddTask(true);
+                      }}
+                    >
+                      <MdAddBox size={25} />
+                    </Nav.Link>
+                  </Col>
+                  <Col
+                    className="d-flex"
+                    style={{ borderBottom: "solid 1px" }}
+                    sm={12}
+                  >
+                    <Col xs={2}>{`Skola`}</Col>
+                    <Col xs={2}>{`Kommun`}</Col>
+                    <Col xs={3}>{`Kurs`}</Col>
+                    <Col xs={2}>{`Datum`}</Col>
+                    <Col xs={2}>{`Tid`}</Col>
+                  </Col>
+                  <Col xs={12} className="mt-2">
+                    {tasks.map(renderTasks)}
+                  </Col>
+                </Card.Body>
+              </Card>
+            </Row>
           </>
         ) : (
           <Col>
             {show && itemIndex !== undefined ? (
-              <div
-                className="text-white todo-profile d-flex"
-                style={{ textShadow: "1px 1px black" }}
-              >
-                <div className="m-auto">{`Här kan det finnas data ${tasks[itemIndex].title}`}</div>
-                <Button onClick={() => handleShow()}>{`stäng`}</Button>
-              </div>
+              <>
+                <Col
+                  xs={12}
+                  style={{
+                    width: "60vw",
+                    margin: "auto",
+                  }}
+                >
+                  <h1 className="text-white text-center">{`JOBB`}</h1>
+                </Col>
+                <Row className="mx-auto h-100">
+                  <Card className="information-card">
+                    <Card.Body className="text-white">
+                      <Col>
+                        <Col xs={6}>
+                          <h1>{tasks[itemIndex].title}</h1>
+                          <h3>{`Skola: ${tasks[itemIndex].schoolName} - ${tasks[itemIndex].location}`}</h3>
+                          <h4>{`Kurs: ${tasks[itemIndex].class}`}</h4>
+                          <h4>{`Datum: ${tasks[itemIndex].date}`}</h4>
+                          <h4>{`Tid: ${tasks[itemIndex].timeStart} - ${tasks[itemIndex].timeEnd}`}</h4>
+                          <p>{`${tasks[itemIndex].text}`}</p>
+                        </Col>
+                        <br />
+                        <Col>
+                          <Col
+                            className="d-flex"
+                            style={{ borderBottom: "solid 1px" }}
+                          >
+                            <Col>{`Namn`}</Col>
+                            <Col>{`Telefon`}</Col>
+                            <Col>{`Email`}</Col>
+                            <Col>{`Status`}</Col>
+                          </Col>
+                          {!!user.length ? (
+                            <Col className="d-flex">
+                              <Col>{`${user[0].firstname} ${user[0].surname}`}</Col>
+                              <Col>{user[0].phone}</Col>
+                              <Col>{user[0].email}</Col>
+                              <Col>{user[0].isDone ? "Klar" : "Ej klar"}</Col>
+                            </Col>
+                          ) : (
+                            <Col className="d-flex">
+                              <Col></Col>
+                              <Col></Col>
+                              <Col></Col>
+                              <Col>{`Ej tilldelad`}</Col>
+                            </Col>
+                          )}
+                        </Col>
+                        <br />
+                      </Col>
+                    </Card.Body>
+                    <div className="text-end">
+                      <Button
+                        className="m-1"
+                        variant="secondary"
+                        onClick={() => {
+                          setUser("");
+                          handleShow();
+                        }}
+                      >{`stäng`}</Button>
+                    </div>
+                  </Card>
+                </Row>
+              </>
             ) : (
               <></>
             )}

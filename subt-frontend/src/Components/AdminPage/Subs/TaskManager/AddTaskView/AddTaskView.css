@@ -1,0 +1,9 @@
+.add-view-card {
+  position: absolute !important;
+  background-color: rgba(0, 0, 0, 0.8) !important;
+  width: 70rem !important;
+  height: 65vh;
+  margin: auto;
+  overflow: auto;
+  z-index: 22;
+}
