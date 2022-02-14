@@ -1,13 +1,22 @@
 import { Button, Card, Col, Row, Nav, Modal } from "react-bootstrap";
 import { db } from "../../../../firebase-config";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { MdDeleteOutline, MdModeEditOutline, MdAddBox } from "react-icons/md";
 import { AiFillEye } from "react-icons/ai";
 import "./TaskManager.css";
+import AddTaskView from "./AddTaskView/AddTaskView";
 
 const TaskManager = () => {
   const [tasks, setTasks] = useState([]);
+  const [addTask, setAddTask] = useState(false);
   const [show, setShow] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [itemIndex, setItemIndex] = useState(0);
@@ -15,6 +24,11 @@ const TaskManager = () => {
   const [user, setUser] = useState([]);
   const handleModalShow = () => setModalShow((current) => !current);
   const handleShow = () => setShow((current) => !current);
+
+  const deleteTask = async (id) => {
+    await deleteDoc(doc(db, "Tasks", id));
+    setIsLoading(true);
+  };
 
   const getTasks = async () => {
     const tasksCollectionRef = collection(db, "Tasks");
@@ -145,7 +159,7 @@ const TaskManager = () => {
             variant="primary"
             style={{ width: "15%" }}
             onClick={() => {
-              //  DELETE FUNKTION
+              deleteTask(tasks[itemIndex].id);
               handleModalShow();
             }}
           >
@@ -160,6 +174,9 @@ const TaskManager = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+      {addTask && (
+        <AddTaskView setAddTask={setAddTask} setIsLoading={setIsLoading} />
+      )}
       <Row className="mx-auto">
         {!show ? (
           <>
@@ -178,7 +195,9 @@ const TaskManager = () => {
                   <Col className="text-end">
                     <Nav.Link
                       style={{ padding: "0", color: "white" }}
-                      onClick={() => {}}
+                      onClick={() => {
+                        setAddTask(true);
+                      }}
                     >
                       <MdAddBox size={25} />
                     </Nav.Link>
