@@ -102,7 +102,7 @@ const HeaderNav = () => {
                       <>
                         {userListInfo[0].role === "admin" ? (
                           <Col>
-                            <a href="/admin">{`Användare`}</a>
+                            <a href="/admin">{`Admin`}</a>
                           </Col>
                         ) : (
                           <></>
@@ -151,7 +151,7 @@ const HeaderNav = () => {
                 {userListInfo[0].role === "admin" ? (
                   <Col>
                     <span>
-                      <Nav.Link href="/admin">{`Användare`}</Nav.Link>
+                      <Nav.Link href="/admin">{`Admin`}</Nav.Link>
                     </span>
                   </Col>
                 ) : (
