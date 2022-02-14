@@ -12,9 +12,9 @@ const HeaderNav = () => {
   const handleOpen = () => setIsOpen((current) => !current);
   const { logOut, user } = useUserAuth();
   const [loading, setLoading] = useState(true);
-  const [todoCardInfo, setTodoCardInfo] = useState([]);
+  const [userListInfo, setuserListInfo] = useState([]);
 
-  const getTaskItems = async () => {
+  const getUsersList = async () => {
     const getPostsFromFirebase = [];
     const querySnapshot = await getDocs(
       query(collection(db, "users"), where("email", "==", user.email))
@@ -26,14 +26,14 @@ const HeaderNav = () => {
       });
     });
 
-    setTodoCardInfo(getPostsFromFirebase);
+    setuserListInfo(getPostsFromFirebase);
     setLoading(false);
     return () => querySnapshot();
   };
 
   useEffect(() => {
     if (loading === true && !!user.email) {
-      getTaskItems();
+      getUsersList();
     }
   });
 
@@ -98,9 +98,9 @@ const HeaderNav = () => {
                     <Col>
                       <a href="/main">{`Hem`}</a>
                     </Col>
-                    {!!todoCardInfo.length ? (
+                    {!!userListInfo.length ? (
                       <>
-                        {todoCardInfo[0].role === "admin" ? (
+                        {userListInfo[0].role === "admin" ? (
                           <Col>
                             <a href="/admin">{`Användare`}</a>
                           </Col>
@@ -146,9 +146,9 @@ const HeaderNav = () => {
                 <Nav.Link href="/main">{`Hem`}</Nav.Link>
               </span>
             </Col>
-            {!!todoCardInfo.length ? (
+            {!!userListInfo.length ? (
               <>
-                {todoCardInfo[0].role === "admin" ? (
+                {userListInfo[0].role === "admin" ? (
                   <Col>
                     <span>
                       <Nav.Link href="/admin">{`Användare`}</Nav.Link>
