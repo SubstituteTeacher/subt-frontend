@@ -3,6 +3,7 @@ import { db } from "../../../../firebase-config";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { ImCross } from "react-icons/im";
 import { useEffect, useState } from "react";
+import ProfileSettings from "../../../Profile/ProfileSettings/ProfileSettings";
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -159,12 +160,12 @@ const UserList = () => {
           <Col>
             {show && itemIndex !== undefined ? (
               <div
-                className="text-white todo-profile d-flex"
-                style={{ textShadow: "1px 1px black" }}
-              >
-                <div className="m-auto">{`Här kan det finnas data ${users[itemIndex].email}`}</div>
-                <Button onClick={() => handleShow()}>{`stäng`}</Button>
-              </div>
+              className="text-white text-center"
+              style={{minHeight: "75vh", maxHeight: "75vh", width: "60vw", margin: "auto"}}
+            >
+              <div className="m-auto"><ProfileSettings props={users[itemIndex].id}/></div>
+              <Button className="mt-5" onClick={() => handleShow()}>{`stäng`}</Button>
+            </div>
             ) : (
               <></>
             )}

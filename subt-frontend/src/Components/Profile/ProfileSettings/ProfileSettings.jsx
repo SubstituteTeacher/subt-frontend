@@ -22,7 +22,7 @@ import {
 import { useUserAuth } from "../../../context/UserAuthContext";
 import "./ProfileSettings.css";
 
-const ProfileSettings = () => {
+const ProfileSettings = (props) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState("");
 
@@ -62,10 +62,11 @@ const ProfileSettings = () => {
   const [loading, setLoading] = useState(true);
   const { user } = useUserAuth();
 
+  console.log(props)
   const getUserInfo = async () => {
     const getPostsFromFirebase = [];
     const querySnapshot = await getDocs(
-      query(collection(db, "users"), where("id", "==", user.uid))
+      query(collection(db, "users"), where("id", "==", props.props))
     );
     querySnapshot.forEach((doc) => {
       getPostsFromFirebase.push({
@@ -290,8 +291,6 @@ const ProfileSettings = () => {
   };
 
   return (
-    <div id="profile-background">
-      <div className="profile-opacity text-white align-items-center d-flex">
         <Container
           className="text-center h-75"
           fluid
@@ -308,14 +307,12 @@ const ProfileSettings = () => {
               </div>
             </Card>
           </Row>
-          <Button
+          {/* <Button
             variant="primary"
             onClick={() => {
               navigate("/profile");
-            }}>{`Tillbaka`}</Button>
+            }}>{`Tillbaka`}</Button> */}
         </Container>
-      </div>
-    </div>
   );
 };
 export default ProfileSettings;
