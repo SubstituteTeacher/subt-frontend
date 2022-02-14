@@ -8,39 +8,29 @@ import {
   Nav,
   Collapse,
 } from "react-bootstrap";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { db } from "../../../firebase-config";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  doc,
+  updateDoc,
+} from "@firebase/firestore";
+import { useUserAuth } from "../../../context/UserAuthContext";
 import "./ProfileSettings.css";
 
 const ProfileSettings = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState("");
-  const [isChecked, setIsChecked] = useState({
-    male: false,
-    female: false,
-    undefined: false,
-  });
-  const tempInfo = {
-    id: "1234567890",
-    firstname: "Bengan",
-    surname: "Bengalsson",
-    age: "1982-01-01",
-    email: "marcus.94.richardson@gmail.com",
-    phone: "072-419 22 22",
-    bankAccount: "1234-12341112",
-    bank: "Glasbanken",
-    adress: "Bengalgatan 64",
-    zipCode: "111 11",
-    city: "Bengaldesh",
-    username: "BengalBengan82",
-    password: "asd",
-    sex: "Man",
-  };
+
   const headers = {
     id: "",
     firstname: "Namn",
     surname: "Efternamn",
-    age: "Föddelseår",
+    age: "Födelseår",
     email: "Email",
     phone: "Telefon",
     bankAccount: "Kontonummer",
@@ -49,105 +39,174 @@ const ProfileSettings = () => {
     zipCode: "Postnummer",
     city: "Stad",
     username: "Användarnamn",
-    password: "Lösenord",
     sex: "Kön",
   };
-  const [user, setUser] = useState({
-    id: tempInfo.id,
-    firstname: tempInfo.firstname,
-    surname: tempInfo.surname,
-    age: tempInfo.age,
-    email: tempInfo.email,
-    phone: tempInfo.phone,
-    bankAccount: tempInfo.bankAccount,
-    bank: tempInfo.bank,
-    adress: tempInfo.adress,
-    zipCode: tempInfo.zipCode,
-    city: tempInfo.city,
-    username: tempInfo.username,
-    password: tempInfo.password,
-    sex: tempInfo.sex,
+
+  const [currentUser, setCurrentUser] = useState({
+    id: "",
+    firstname: "",
+    surname: "",
+    age: "",
+    email: "",
+    phone: "",
+    bankAccount: "",
+    bank: "",
+    adress: "",
+    zipCode: "",
+    city: "",
+    username: "",
+    sex: "",
+  });
+
+  const [updateUserInfo, setUpdateUserInfo] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const { user } = useUserAuth();
+
+  const getUserInfo = async () => {
+    const getPostsFromFirebase = [];
+    const querySnapshot = await getDocs(
+      query(collection(db, "users"), where("id", "==", user.uid))
+    );
+    querySnapshot.forEach((doc) => {
+      getPostsFromFirebase.push({
+        ...doc.data(),
+        id: doc.id,
+      });
+    });
+    setCurrentUser({
+      id: getPostsFromFirebase[0]?.id ?? "",
+      firstname: getPostsFromFirebase[0]?.firstname ?? "",
+      surname: getPostsFromFirebase[0]?.surname ?? "",
+      age: getPostsFromFirebase[0]?.age ?? "",
+      email: getPostsFromFirebase[0]?.email ?? "",
+      phone: getPostsFromFirebase[0]?.phone ?? "",
+      bankAccount: getPostsFromFirebase[0]?.bankAccount ?? "",
+      bank: getPostsFromFirebase[0]?.bank ?? "",
+      adress: getPostsFromFirebase[0]?.adress ?? "",
+      zipCode: getPostsFromFirebase[0]?.zipCode ?? "",
+      city: getPostsFromFirebase[0]?.city ?? "",
+      username: getPostsFromFirebase[0]?.username ?? "",
+      sex: getPostsFromFirebase[0]?.sex ?? "",
+    });
+    setLoading(false);
+    return () => querySnapshot();
+  };
+
+  useEffect(() => {
+    if (loading && user.uid) {
+      getUserInfo();
+    }
+  });
+
+  const updateUser = async () => {
+    const docRef = doc(db, "users", user.uid);
+    await updateDoc(docRef, {
+      firstname: currentUser.firstname,
+      surname: currentUser.surname,
+      age: currentUser.age,
+      phone: currentUser.phone,
+      bankAccount: currentUser.bankAccount,
+      bank: currentUser.bank,
+      adress: currentUser.adress,
+      zipCode: currentUser.zipCode,
+      city: currentUser.city,
+      username: currentUser.username,
+      sex: currentUser.sex,
+    });
+    setUpdateUserInfo(false);
+  };
+
+  useEffect(() => {
+    if (updateUserInfo) {
+      updateUser();
+    }
   });
 
   const setData = (index, data) => {
     switch (index) {
       case "Namn":
-        setUser({
-          ...user,
+        setCurrentUser({
+          ...currentUser,
           firstname: data,
         });
+        setUpdateUserInfo(true);
         break;
       case "Efternamn":
-        setUser({
-          ...user,
+        setCurrentUser({
+          ...currentUser,
           surname: data,
         });
+        setUpdateUserInfo(true);
         break;
-      case "Föddelseår":
-        setUser({
-          ...user,
+      case "Födelseår":
+        setCurrentUser({
+          ...currentUser,
           age: data,
         });
+        setUpdateUserInfo(true);
         break;
       case "Email":
-        setUser({
-          ...user,
+        setCurrentUser({
+          ...currentUser,
           email: data,
         });
+        setUpdateUserInfo(true);
         break;
       case "Telefon":
-        setUser({
-          ...user,
+        setCurrentUser({
+          ...currentUser,
           phone: data,
         });
+        setUpdateUserInfo(true);
         break;
       case "Kontonummer":
-        setUser({
-          ...user,
+        setCurrentUser({
+          ...currentUser,
           bankAccount: data,
         });
+        setUpdateUserInfo(true);
         break;
       case "Bank":
-        setUser({
-          ...user,
+        setCurrentUser({
+          ...currentUser,
           bank: data,
         });
+        setUpdateUserInfo(true);
         break;
       case "Address":
-        setUser({
-          ...user,
+        setCurrentUser({
+          ...currentUser,
           adress: data,
         });
+        setUpdateUserInfo(true);
         break;
       case "Postnummer":
-        setUser({
-          ...user,
+        setCurrentUser({
+          ...currentUser,
           zipCode: data,
         });
+        setUpdateUserInfo(true);
         break;
       case "Stad":
-        setUser({
-          ...user,
+        setCurrentUser({
+          ...currentUser,
           city: data,
         });
+        setUpdateUserInfo(true);
         break;
       case "Användarnamn":
-        setUser({
-          ...user,
+        setCurrentUser({
+          ...currentUser,
           username: data,
         });
-        break;
-      case "Lösenord":
-        setUser({
-          ...user,
-          password: data,
-        });
+        setUpdateUserInfo(true);
         break;
       case "Kön":
-        setUser({
-          ...user,
+        setCurrentUser({
+          ...currentUser,
           sex: data,
         });
+        setUpdateUserInfo(true);
         break;
       default:
         return;
@@ -176,13 +235,11 @@ const ProfileSettings = () => {
             onClick={() => {
               setData(header, data);
               setOpen("");
-            }}
-          >{`Spara`}</Button>
+            }}>{`Spara`}</Button>
           &nbsp;
           <Button
             variant="secondary"
-            onClick={() => setOpen("")}
-          >{`Stäng`}</Button>
+            onClick={() => setOpen("")}>{`Stäng`}</Button>
         </Col>
       </div>
     );
@@ -200,7 +257,7 @@ const ProfileSettings = () => {
                     <h5>{`${val[1]}`}</h5>
                   </Col>
                   <Col className="p-0">
-                    <h5>{`${Object.entries(user)[index][1]}`}</h5>
+                    <h5>{`${Object.entries(currentUser)[index][1]}`}</h5>
                   </Col>
                   <Col xs={2} className="text-end p-0">
                     <Nav.Link
@@ -209,8 +266,7 @@ const ProfileSettings = () => {
                       aria-expanded={open}
                       onClick={() => {
                         setOpen(index);
-                      }}
-                    >
+                      }}>
                       <h5>{`Redigera`}</h5>
                     </Nav.Link>
                   </Col>
@@ -218,7 +274,7 @@ const ProfileSettings = () => {
                     <div>
                       {newData(
                         Object.entries(headers)[index][1],
-                        Object.entries(tempInfo)[index][1]
+                        Object.entries(currentUser)[index][1]
                       )}
                     </div>
                   </Collapse>
@@ -239,8 +295,7 @@ const ProfileSettings = () => {
         <Container
           className="text-center h-75"
           fluid
-          style={{ textShadow: "2px 2px black" }}
-        >
+          style={{ textShadow: "2px 2px black" }}>
           <Row className="mx-auto h-100 align-content-center">
             <Card className="information-card">
               <Card.Header className="text-center">
@@ -257,8 +312,7 @@ const ProfileSettings = () => {
             variant="primary"
             onClick={() => {
               navigate("/profile");
-            }}
-          >{`Tillbaka`}</Button>
+            }}>{`Tillbaka`}</Button>
         </Container>
       </div>
     </div>
