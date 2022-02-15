@@ -261,7 +261,9 @@ const TaskManager = () => {
                               <Col>{`${user[0].firstname} ${user[0].surname}`}</Col>
                               <Col>{user[0].phone}</Col>
                               <Col>{user[0].email}</Col>
-                              <Col>{user[0].isDone ? "Klar" : "Ej klar"}</Col>
+                              <Col>
+                                {tasks[itemIndex].isDone ? "Klar" : "Ej klar"}
+                              </Col>
                             </Col>
                           ) : (
                             <Col className="d-flex">
