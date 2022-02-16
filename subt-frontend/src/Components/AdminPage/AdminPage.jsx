@@ -1,4 +1,12 @@
-import { Button, Card, Col, Container, Nav, Offcanvas } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  Nav,
+  Offcanvas,
+  Row,
+} from "react-bootstrap";
 import { useState } from "react";
 import { BsFillGrid3X3GapFill } from "react-icons/bs";
 import UserList from "./Subs/UserList/UserList";
@@ -21,9 +29,53 @@ function AdminPage() {
       case "report":
         return <Reports />;
       case "??":
-        return <h1>??</h1>;
+        return (
+          <>
+            <Col
+              xs={12}
+              style={{
+                width: "60vw",
+                margin: "auto",
+              }}
+            >
+              <h1 className="text-white text-center">{`?????`}</h1>
+            </Col>
+            <Row className="mx-auto h-100">
+              <Card className="information-card d-grid">
+                <Card.Body className="text-white text-center align-self-center">
+                  <h1>{`???????????????????????????????????????`}</h1>
+                  <h1>{`???????????????????????????????????????`}</h1>
+                  <h1>{`???????????????????????????????????????`}</h1>
+                  <h1>{`???????????????????????????????????????`}</h1>
+                  <h1>{`???????????????????????????????????????`}</h1>
+                  <h1>{`???????????????????????????????????????`}</h1>
+                  <h1>{`???????????????????????????????????????`}</h1>
+                </Card.Body>
+              </Card>
+            </Row>
+          </>
+        );
       default:
-        return <h1>woop</h1>;
+        return (
+          <>
+            <Col
+              xs={12}
+              style={{
+                width: "60vw",
+                margin: "auto",
+              }}
+            >
+              <h1 className="text-white text-center">{`ADMINPAGE`}</h1>
+            </Col>
+            <Row className="mx-auto h-100">
+              <Card className="information-card d-grid">
+                <Card.Body className="text-white text-center align-self-center">
+                  <h1>{`Du ser fin ut idag! =)`}</h1>
+                </Card.Body>
+              </Card>
+            </Row>
+          </>
+        );
     }
   };
   return (
@@ -57,6 +109,17 @@ function AdminPage() {
                   </Offcanvas.Header>
                   <Offcanvas.Body>
                     <Col xs={10} className=" m-auto">
+                      <Col>
+                        <Nav.Link
+                          className="edit-btn"
+                          onClick={() => {
+                            handleShow();
+                            setSelect("");
+                          }}
+                        >
+                          <h4>{`Start`}</h4>
+                        </Nav.Link>
+                      </Col>
                       <Col>
                         <Nav.Link
                           className="edit-btn"
