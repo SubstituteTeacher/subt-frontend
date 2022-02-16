@@ -60,7 +60,7 @@ const LoginPage = () => {
               <Form.Label className="text-white">{`Lösenord`}</Form.Label>
               <Form.Control
                 type="password"
-                placeholder="Lösenord"
+                placeholder="Password"
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Form.Group>
@@ -78,10 +78,15 @@ const LoginPage = () => {
                 >
                   {`Logga in`}
                 </Button>
+
                 <div className="text-white m-1 text-center">
-                  {`Har du inget konto?`}{" "}
+                  {`Har du inget konto? `}
                   <Link to="/signup">{`Skapa konto`}</Link>
                 </div>
+                <div className="text-white m-1 text-center">
+                  <Link to="/forgot-password">Glömt lösenord?</Link>
+                </div>
+
                 <div>
                   <GoogleButton
                     style={{ width: "100%" }}
@@ -89,9 +94,6 @@ const LoginPage = () => {
                     type="dark"
                     onClick={handleGoogleSignIn}
                   />
-                </div>
-                <div className="p-8 box mt-2 text-center">
-                  <Link to="/forgot-password">Glömt lösenord?</Link>
                 </div>
               </div>
             ) : (
