@@ -60,6 +60,7 @@ const ProfileSettings = (props) => {
   const [loading, setLoading] = useState(true);
   const { user } = useUserAuth();
 
+  console.log(props);
   const getUserInfo = async () => {
     const getPostsFromFirebase = [];
     const querySnapshot = await getDocs(
@@ -308,6 +309,11 @@ const ProfileSettings = (props) => {
           </div>
         </Card>
       </Row>
+      {/* <Button
+            variant="primary"
+            onClick={() => {
+              navigate("/profile");
+            }}>{`Tillbaka`}</Button> */}
     </Container>
   );
 };
