@@ -234,7 +234,7 @@ const Profile = () => {
       </>
     );
   };
-  console.log(user.uid);
+
   return (
     <div id="profile-background">
       <div className="profile-opacity  align-items-center d-flex">
@@ -348,23 +348,13 @@ const Profile = () => {
         </Modal>
         {showSettings ? (
           <>
-            <div
-              className="text-white text-center"
-              style={{
-                minHeight: "75vh",
-                maxHeight: "75vh",
-                width: "60vw",
-                margin: "auto",
-              }}
-            >
-              <div className="m-auto">
-                <ProfileSettings props={user.uid} />
-              </div>
+            <Container className="text-center" fluid>
+              <ProfileSettings props={user.uid} />
               <Button
                 className="mt-5"
                 onClick={() => setShowSettings(false)}
               >{`stäng`}</Button>
-            </div>
+            </Container>
           </>
         ) : (
           <>
