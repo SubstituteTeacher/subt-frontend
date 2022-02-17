@@ -134,8 +134,7 @@ const Profile = () => {
                   onClick={() => {
                     setItemIndex(index);
                     setShow(true);
-                  }}
-                >{`Information`}</Button>
+                  }}>{`Information`}</Button>
               </Card.Body>
             </Card>
           </Col>
@@ -159,8 +158,7 @@ const Profile = () => {
         {jobTimer > 0 ? (
           <Container
             className="align-self-center m-5 text-center text-white"
-            fluid
-          >
+            fluid>
             <Row className="mx-auto mt-5">
               <Col
                 xs={12}
@@ -168,15 +166,13 @@ const Profile = () => {
                   textAlign: "end",
                   width: "60vw",
                   margin: "auto",
-                }}
-              >
+                }}>
                 <Col>
                   <Button
                     variant="primary"
                     onClick={() => {
                       setShowSettings(true);
-                    }}
-                  >{`Inställningar`}</Button>
+                    }}>{`Inställningar`}</Button>
                   &nbsp;
                   <Button>{`Statistik`}</Button>
                 </Col>
@@ -201,8 +197,7 @@ const Profile = () => {
         ) : (
           <Container
             className="align-self-center m-5 text-center text-white"
-            fluid
-          >
+            fluid>
             <Row className="mx-auto mt-5">
               <Col
                 xs={12}
@@ -210,15 +205,13 @@ const Profile = () => {
                   textAlign: "end",
                   width: "60vw",
                   margin: "auto",
-                }}
-              >
+                }}>
                 <Col>
                   <Button
                     variant="primary"
                     onClick={() => {
                       setShowSettings(true);
-                    }}
-                  >{`Inställningar`}</Button>
+                    }}>{`Inställningar`}</Button>
                   &nbsp;
                   <Button>{`Statistik`}</Button>
                 </Col>
@@ -242,8 +235,7 @@ const Profile = () => {
           show={modalShow}
           onHide={handleModalShow}
           backdrop="static"
-          keyboard={false}
-        >
+          keyboard={false}>
           <Modal.Header closeButton>
             <Modal.Title>{`Rapportera`}</Modal.Title>
           </Modal.Header>
@@ -256,8 +248,7 @@ const Profile = () => {
                   onChange={(e) => {
                     if (e.target.value === "overtime") setOvertime(true);
                     else setOvertime(false);
-                  }}
-                >
+                  }}>
                   {itemIndex !== undefined ? (
                     <>
                       <option>{`${todoCardInfo[itemIndex].timeStart} - ${todoCardInfo[itemIndex].timeEnd}`}</option>
@@ -274,8 +265,7 @@ const Profile = () => {
                       aria-label="Default select example"
                       onChange={(e) => {
                         setExtraHours(e.target.value);
-                      }}
-                    >
+                      }}>
                       <option value="15">{`15min`}</option>
                       <option value="30">{`30min`}</option>
                       <option value="45">{`45min`}</option>
@@ -316,8 +306,7 @@ const Profile = () => {
                   ) : (
                     <></>
                   )
-                }
-              >
+                }>
                 <span className="d-inline-block">
                   <Button
                     variant="primary"
@@ -335,8 +324,7 @@ const Profile = () => {
                           date.toLocaleDateString() >=
                             todoCardInfo[itemIndex].date)
                       )
-                    }
-                  >
+                    }>
                     {`Skicka rapport`}
                   </Button>
                 </span>
@@ -352,8 +340,7 @@ const Profile = () => {
               <ProfileSettings props={user.uid} />
               <Button
                 className="mt-5"
-                onClick={() => setShowSettings(false)}
-              >{`stäng`}</Button>
+                onClick={() => setShowSettings(false)}>{`Stäng`}</Button>
             </Container>
           </>
         ) : (
@@ -370,8 +357,7 @@ const Profile = () => {
                             textAlign: "end",
                             width: "60vw",
                             margin: "auto",
-                          }}
-                        >
+                          }}>
                           <h1 className="text-white text-center">{`TODO'S`}</h1>
                           <Col>
                             <span style={{ textAlign: "end" }}>
@@ -379,8 +365,7 @@ const Profile = () => {
                                 variant="primary"
                                 onClick={() => {
                                   setShowSettings(true);
-                                }}
-                              >{`Inställningar`}</Button>
+                                }}>{`Inställningar`}</Button>
                               &nbsp;
                               <Button>{`Statistik`}</Button>
                             </span>
@@ -395,8 +380,7 @@ const Profile = () => {
                         {show && itemIndex !== undefined ? (
                           <div
                             className="text-white todo-profile d-flex"
-                            style={{ textShadow: "1px 1px black" }}
-                          >
+                            style={{ textShadow: "1px 1px black" }}>
                             <div className="m-auto">
                               <h1>{todoCardInfo[itemIndex].title}</h1>
                               <h3>{`Skola: ${todoCardInfo[itemIndex].schoolName} - ${todoCardInfo[itemIndex].location}`}</h3>
@@ -410,15 +394,13 @@ const Profile = () => {
                                   variant="primary"
                                   onClick={() => {
                                     handleModalShow();
-                                  }}
-                                >{`Rapportera`}</Button>
+                                  }}>{`Rapportera`}</Button>
                                 <Button
                                   className="m-1"
                                   variant="secondary"
                                   onClick={() => {
                                     handleShow();
-                                  }}
-                                >{`stäng`}</Button>
+                                  }}>{`stäng`}</Button>
                               </div>
                             </div>
                           </div>

@@ -58,7 +58,7 @@ const AddTaskView = (props) => {
               </Form.Group>
 
               <Form.Group as={Col} className="mb-3">
-                <p className="m-auto">{`Klass`}</p>
+                <p className="m-auto">{`Kurs`}</p>
                 <Form.Control
                   required
                   onChange={(e) =>
@@ -151,7 +151,7 @@ const AddTaskView = (props) => {
               <Form.Group as={Col} className="mb-3">
                 <p className="m-auto">{`Beskrivning`}</p>
                 <Form.Control
-                  as="textArea"
+                  as="textarea"
                   required
                   onChange={(e) =>
                     setNewTask({
@@ -170,8 +170,7 @@ const AddTaskView = (props) => {
                 createTask();
                 props.setAddTask(false);
                 props.setIsLoading(true);
-              }}
-            >
+              }}>
               {`Lägg till`}
             </Button>
             &nbsp;

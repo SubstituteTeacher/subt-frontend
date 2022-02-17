@@ -233,13 +233,11 @@ const ProfileSettings = (props) => {
             onClick={() => {
               setData(header, data);
               setOpen("");
-            }}
-          >{`Spara`}</Button>
+            }}>{`Spara`}</Button>
           &nbsp;
           <Button
             variant="secondary"
-            onClick={() => setOpen("")}
-          >{`Stäng`}</Button>
+            onClick={() => setOpen("")}>{`Stäng`}</Button>
         </Col>
       </div>
     );
@@ -266,8 +264,7 @@ const ProfileSettings = (props) => {
                       aria-expanded={open}
                       onClick={() => {
                         setOpen(index);
-                      }}
-                    >
+                      }}>
                       <h5>{`Redigera`}</h5>
                     </Nav.Link>
                   </Col>
@@ -294,8 +291,7 @@ const ProfileSettings = (props) => {
     <Container
       className="text-center h-75"
       fluid
-      style={{ textShadow: "2px 2px black" }}
-    >
+      style={{ textShadow: "2px 2px black" }}>
       <Row className="mx-auto h-100 align-content-center">
         <Card className="information-card">
           <Card.Header className="text-center">
@@ -308,11 +304,14 @@ const ProfileSettings = (props) => {
           </div>
         </Card>
       </Row>
-      {/* <Button
-            variant="primary"
-            onClick={() => {
-              navigate("/profile");
-            }}>{`Tillbaka`}</Button> */}
+
+      {/*
+        <Button
+          variant="primary"
+          onClick={() => {
+            navigate("/profile");
+          }}>{`Tillbaka`}</Button>
+        */}
     </Container>
   );
 };

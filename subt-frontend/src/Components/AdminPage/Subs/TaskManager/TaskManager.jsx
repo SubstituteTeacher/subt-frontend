@@ -1,4 +1,4 @@
-import { Button, Card, Col, Row, Nav, Modal } from "react-bootstrap";
+import { Button, Card, Col, Row, Nav, Modal, Form } from "react-bootstrap";
 import { db } from "../../../../firebase-config";
 import {
   collection,
@@ -6,6 +6,7 @@ import {
   query,
   where,
   deleteDoc,
+  updateDoc,
   doc,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
@@ -21,9 +22,24 @@ const TaskManager = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [itemIndex, setItemIndex] = useState(0);
   const [modalShow, setModalShow] = useState(false);
-  const [user, setUser] = useState([]);
+  const [editModalShow, setEditModalShow] = useState(false);
+  const [Task, setTask] = useState([]);
   const handleModalShow = () => setModalShow((current) => !current);
+  const handleEditModalShow = () => setEditModalShow((current) => !current);
   const handleShow = () => setShow((current) => !current);
+  const [updateTaskInfo, setUpdateTaskInfo] = useState(false);
+
+  const [currentTask, setCurrentTask] = useState({
+    title: "",
+    class: "",
+    date: "",
+    location: "",
+    schoolName: "",
+    text: "",
+    timeEnd: "",
+    timeStart: "",
+  });
+  console.log("currenttask", currentTask);
 
   const deleteTask = async (id) => {
     await deleteDoc(doc(db, "Tasks", id));
@@ -44,21 +60,44 @@ const TaskManager = () => {
     }
   });
 
-  const getUser = async (id) => {
+  const updateTask = async (id) => {
+    console.log(id);
+    await updateDoc(doc(db, "Tasks", id), {
+      class: currentTask.class,
+      date: currentTask.date,
+      location: currentTask.location,
+      schoolName: currentTask.schoolName,
+      text: currentTask.text,
+      timeEnd: currentTask.timeEnd,
+      timeStart: currentTask.timeStart,
+      title: currentTask.title,
+    });
+    setUpdateTaskInfo(false);
+    setIsLoading(true);
+  };
+
+  useEffect(() => {
+    if (updateTaskInfo) {
+      updateTask(tasks[itemIndex].id);
+    }
+  });
+
+  const getTask = async (id) => {
     const getPostsFromFirebase = [];
     const querySnapshot = await getDocs(
-      query(collection(db, "users"), where("id", "==", id))
+      query(collection(db, "Tasks"), where("id", "==", id))
     );
     querySnapshot.forEach((doc) => {
       getPostsFromFirebase.push({
         ...doc.data(),
         id: doc.id,
       });
-      setUser(getPostsFromFirebase);
+      setTask(getPostsFromFirebase);
     });
   };
 
   const renderTasks = (data, index) => {
+    //console.log("currentTask:", currentTask);
     return (
       <Col key={index} className="d-flex text-white">
         <Col xs={2}>
@@ -81,14 +120,28 @@ const TaskManager = () => {
             style={{ padding: "0", color: "white" }}
             onClick={() => {
               setItemIndex(index);
-              getUser(data.userId);
+              getTask(data.TaskId);
               handleShow();
-            }}
-          >
+            }}>
             <AiFillEye size={25} />
           </Nav.Link>
           &nbsp;
-          <Nav.Link style={{ padding: "0", color: "white" }}>
+          <Nav.Link
+            style={{ padding: "0", color: "white" }}
+            onClick={() => {
+              setItemIndex(index);
+              setCurrentTask({
+                title: tasks[index]?.title,
+                class: tasks[index]?.class,
+                date: tasks[index]?.date,
+                location: tasks[index]?.location,
+                schoolName: tasks[index]?.schoolName,
+                text: tasks[index]?.text,
+                timeEnd: tasks[index]?.timeEnd,
+                timeStart: tasks[index]?.timeStart,
+              });
+              handleEditModalShow();
+            }}>
             <MdModeEditOutline size={25} />
           </Nav.Link>
           &nbsp;
@@ -97,8 +150,7 @@ const TaskManager = () => {
             onClick={() => {
               setItemIndex(index);
               handleModalShow();
-            }}
-          >
+            }}>
             <MdDeleteOutline size={25} />
           </Nav.Link>
         </Col>
@@ -112,8 +164,7 @@ const TaskManager = () => {
         show={modalShow}
         onHide={handleModalShow}
         backdrop="static"
-        keyboard={false}
-      >
+        keyboard={false}>
         <Modal.Header closeButton>
           <Modal.Title>{`RADERA JOBB`}</Modal.Title>
         </Modal.Header>
@@ -153,7 +204,7 @@ const TaskManager = () => {
         </Modal.Body>
         <Modal.Footer className="justify-content-between">
           <p style={{ fontStyle: "italic", textAlign: "start" }}>
-            {`Är du säker på att du radera detta jobb?`}
+            {`Är du säker på att du vill radera detta jobb?`}
           </p>
           <Button
             variant="primary"
@@ -161,16 +212,151 @@ const TaskManager = () => {
             onClick={() => {
               deleteTask(tasks[itemIndex].id);
               handleModalShow();
-            }}
-          >
+            }}>
             {`Ja`}
           </Button>
           <Button
             variant="primary"
             style={{ width: "15%" }}
-            onClick={() => handleModalShow()}
-          >
+            onClick={() => handleModalShow()}>
             {`Nej`}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={editModalShow}
+        onHide={handleEditModalShow}
+        backdrop="static"
+        keyboard={false}>
+        <Modal.Header closeButton>
+          <Modal.Title>{`REDIGERA JOBB`}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {itemIndex !== undefined && !!tasks.length ? (
+            <Card>
+              <Card.Body>
+                <Card.Text>
+                  <strong>{`Titel: `}</strong>
+                  {tasks[itemIndex].title}
+
+                  <Form.Control
+                    onInput={(e) =>
+                      setCurrentTask({
+                        ...currentTask,
+                        title: e.target.value,
+                      })
+                    }
+                  />
+                </Card.Text>
+                <Card.Text>
+                  <strong>{`Skola: `}</strong>
+                  {tasks[itemIndex].schoolName}
+
+                  <Form.Control
+                    onInput={(e) =>
+                      setCurrentTask({
+                        ...currentTask,
+                        schoolName: e.target.value,
+                      })
+                    }
+                  />
+                </Card.Text>
+                <Card.Text>
+                  <strong>{`Stad: `}</strong>
+                  {tasks[itemIndex].location}
+                  <Form.Control
+                    onChange={(e) =>
+                      setCurrentTask({
+                        ...currentTask,
+                        location: e.target.value,
+                      })
+                    }
+                  />
+                </Card.Text>
+                <Card.Text>
+                  <strong>{`Kurs: `}</strong>
+                  {tasks[itemIndex].class}
+                  <Form.Control
+                    onChange={(e) =>
+                      setCurrentTask({
+                        ...currentTask,
+                        class: e.target.value,
+                      })
+                    }
+                  />
+                </Card.Text>
+                <Card.Text>
+                  <strong>{`Datum: `}</strong>
+                  {tasks[itemIndex].date}
+                  <Form.Control
+                    onChange={(e) =>
+                      setCurrentTask({
+                        ...currentTask,
+                        date: e.target.value,
+                      })
+                    }
+                  />
+                </Card.Text>
+                <Card.Text>
+                  <strong>{`Tid: `}</strong>
+                  {`${tasks[itemIndex].timeStart}-${tasks[itemIndex].timeEnd}`}
+                  <Form.Control
+                    required
+                    placeholder="Från: "
+                    onChange={(e) =>
+                      setCurrentTask({
+                        ...currentTask,
+                        timeStart: e.target.value,
+                      })
+                    }
+                  />
+                  <Form.Control
+                    style={{ marginTop: "5px" }}
+                    required
+                    placeholder="Till:"
+                    onChange={(e) =>
+                      setCurrentTask({
+                        ...currentTask,
+                        timeEnd: e.target.value,
+                      })
+                    }
+                  />
+                </Card.Text>
+
+                <Card.Text>
+                  <strong>{`Beskrivning: `}</strong>
+                  {tasks[itemIndex].text}
+                </Card.Text>
+                <Form.Control
+                  as="textarea"
+                  required
+                  onChange={(e) =>
+                    setCurrentTask({
+                      ...currentTask,
+                      text: e.target.value,
+                    })
+                  }
+                />
+              </Card.Body>
+            </Card>
+          ) : (
+            <></>
+          )}
+        </Modal.Body>
+        <Modal.Footer className="justify-content-between">
+          <p style={{ fontStyle: "italic", textAlign: "start" }}>
+            {`Tryck på ändra för att spara dina ändringar`}
+          </p>
+          <Button
+            variant="primary"
+            style={{ width: "15%" }}
+            onClick={() => {
+              setUpdateTaskInfo(true);
+              updateTask(tasks[itemIndex].id);
+              handleEditModalShow();
+            }}>
+            {`Ändra`}
           </Button>
         </Modal.Footer>
       </Modal>
@@ -185,8 +371,7 @@ const TaskManager = () => {
               style={{
                 width: "60vw",
                 margin: "auto",
-              }}
-            >
+              }}>
               <h1 className="text-white text-center">{`JOBB`}</h1>
             </Col>
             <Row className="mx-auto h-100 align-content-center">
@@ -197,16 +382,14 @@ const TaskManager = () => {
                       style={{ padding: "0", color: "white" }}
                       onClick={() => {
                         setAddTask(true);
-                      }}
-                    >
+                      }}>
                       <MdAddBox size={25} />
                     </Nav.Link>
                   </Col>
                   <Col
                     className="d-flex"
                     style={{ borderBottom: "solid 1px" }}
-                    sm={12}
-                  >
+                    sm={12}>
                     <Col xs={2}>{`Skola`}</Col>
                     <Col xs={2}>{`Kommun`}</Col>
                     <Col xs={3}>{`Kurs`}</Col>
@@ -229,8 +412,7 @@ const TaskManager = () => {
                   style={{
                     width: "60vw",
                     margin: "auto",
-                  }}
-                >
+                  }}>
                   <h1 className="text-white text-center">{`JOBB`}</h1>
                 </Col>
                 <Row className="mx-auto h-100">
@@ -249,21 +431,18 @@ const TaskManager = () => {
                         <Col>
                           <Col
                             className="d-flex"
-                            style={{ borderBottom: "solid 1px" }}
-                          >
+                            style={{ borderBottom: "solid 1px" }}>
                             <Col>{`Namn`}</Col>
                             <Col>{`Telefon`}</Col>
                             <Col>{`Email`}</Col>
                             <Col>{`Status`}</Col>
                           </Col>
-                          {!!user.length ? (
+                          {!!Task.length ? (
                             <Col className="d-flex">
-                              <Col>{`${user[0].firstname} ${user[0].surname}`}</Col>
-                              <Col>{user[0].phone}</Col>
-                              <Col>{user[0].email}</Col>
-                              <Col>
-                                {tasks[itemIndex].isDone ? "Klar" : "Ej klar"}
-                              </Col>
+                              <Col>{`${Task[0].firstname} ${Task[0].surname}`}</Col>
+                              <Col>{Task[0].phone}</Col>
+                              <Col>{Task[0].email}</Col>
+                              <Col>{Task[0].isDone ? "Klar" : "Ej klar"}</Col>
                             </Col>
                           ) : (
                             <Col className="d-flex">
@@ -282,10 +461,9 @@ const TaskManager = () => {
                         className="m-1"
                         variant="secondary"
                         onClick={() => {
-                          setUser("");
+                          setTask("");
                           handleShow();
-                        }}
-                      >{`stäng`}</Button>
+                        }}>{`Stäng`}</Button>
                     </div>
                   </Card>
                 </Row>
