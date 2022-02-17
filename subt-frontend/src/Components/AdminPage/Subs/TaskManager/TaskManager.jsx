@@ -250,11 +250,6 @@ const TaskManager = () => {
                     })
                   }
                 />
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    //updateTask(tasks[itemIndex].id);
-                  }}>{`Spara`}</Button>
                 <Card.Text>
                   <strong>{`Skola: `}</strong>
                   {tasks[itemIndex].schoolName}
@@ -267,11 +262,6 @@ const TaskManager = () => {
                     })
                   }
                 />
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    //updateTask(tasks[itemIndex].id);
-                  }}>{`Spara`}</Button>
                 <Card.Text>
                   <strong>{`Stad: `}</strong>
                   {tasks[itemIndex].location}
@@ -284,11 +274,6 @@ const TaskManager = () => {
                     })
                   }
                 />
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    //updateTask(tasks[itemIndex].id);
-                  }}>{`Spara`}</Button>
                 <Card.Text>
                   <strong>{`Kurs: `}</strong>
                   {tasks[itemIndex].class}
@@ -301,11 +286,6 @@ const TaskManager = () => {
                     })
                   }
                 />
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    //updateTask(tasks[itemIndex].id);
-                  }}>{`Spara`}</Button>
                 <Card.Text>
                   <strong>{`Datum: `}</strong>
                   {tasks[itemIndex].date}
@@ -318,11 +298,6 @@ const TaskManager = () => {
                     })
                   }
                 />
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    //updateTask(tasks[itemIndex].id);
-                  }}>{`Spara`}</Button>
                 <Card.Text>
                   <strong>{`Tid: `}</strong>
                   {`${tasks[itemIndex].timeStart}-${tasks[itemIndex].timeEnd}`}
@@ -338,11 +313,6 @@ const TaskManager = () => {
                   }
                 />{" "}
                 <br />
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    //updateTask(tasks[itemIndex].id);
-                  }}>{`Spara`}</Button>
                 <Form.Control
                   required
                   placeholder="Till klockan: xx.xx"
@@ -353,11 +323,6 @@ const TaskManager = () => {
                     })
                   }
                 />
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    //updateTask(tasks[itemIndex].id);
-                  }}>{`Spara`}</Button>
                 <Card.Text>
                   <strong>{`Beskrivning: `}</strong>
                   {tasks[itemIndex].text}
@@ -371,11 +336,6 @@ const TaskManager = () => {
                     })
                   }
                 />
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    //updateTask(tasks[itemIndex].id);
-                  }}>{`Spara`}</Button>
               </Card.Body>
             </Card>
           ) : (
