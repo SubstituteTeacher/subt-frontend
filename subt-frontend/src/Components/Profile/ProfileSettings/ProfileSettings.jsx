@@ -60,7 +60,6 @@ const ProfileSettings = (props) => {
   const [loading, setLoading] = useState(true);
   const { user } = useUserAuth();
 
-  console.log(props);
   const getUserInfo = async () => {
     const getPostsFromFirebase = [];
     const querySnapshot = await getDocs(

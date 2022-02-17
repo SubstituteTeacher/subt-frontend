@@ -15,6 +15,7 @@ import Profile from "./Components/Profile/Profile";
 import ForgotPassword from "./Components/Password/ForgotPassword";
 import ProfileSettings from "./Components/Profile/ProfileSettings/ProfileSettings";
 import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
+import ProtectedAdminRoute from "./Components/ProtectedRoute/ProtectedAdminRoute";
 import { UserAuthContextProvider } from "./context/UserAuthContext";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -37,9 +38,11 @@ function App() {
             path="/admin"
             element={
               <ProtectedRoute>
-                <HeaderNav />
-                <AdminPage />
-                <Footer />
+                <ProtectedAdminRoute>
+                  <HeaderNav />
+                  <AdminPage />
+                  <Footer />
+                </ProtectedAdminRoute>
               </ProtectedRoute>
             }
           />
