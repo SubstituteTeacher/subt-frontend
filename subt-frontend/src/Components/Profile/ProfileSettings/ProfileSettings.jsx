@@ -304,13 +304,14 @@ const ProfileSettings = (props) => {
           </div>
         </Card>
       </Row>
-      {
+
+      {/*
         <Button
           variant="primary"
           onClick={() => {
             navigate("/profile");
           }}>{`Tillbaka`}</Button>
-      }
+        */}
     </Container>
   );
 };

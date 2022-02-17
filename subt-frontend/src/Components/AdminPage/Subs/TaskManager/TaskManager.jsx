@@ -65,8 +65,6 @@ const TaskManager = () => {
     await updateDoc(doc(db, "Tasks", id), {
       class: currentTask.class,
       date: currentTask.date,
-      //isAssigned: false,
-      //isDone: false,
       location: currentTask.location,
       schoolName: currentTask.schoolName,
       text: currentTask.text,
@@ -206,7 +204,7 @@ const TaskManager = () => {
         </Modal.Body>
         <Modal.Footer className="justify-content-between">
           <p style={{ fontStyle: "italic", textAlign: "start" }}>
-            {`Är du säker på att du radera detta jobb?`}
+            {`Är du säker på att du vill radera detta jobb?`}
           </p>
           <Button
             variant="primary"
@@ -241,93 +239,97 @@ const TaskManager = () => {
                 <Card.Text>
                   <strong>{`Titel: `}</strong>
                   {tasks[itemIndex].title}
+
+                  <Form.Control
+                    onInput={(e) =>
+                      setCurrentTask({
+                        ...currentTask,
+                        title: e.target.value,
+                      })
+                    }
+                  />
                 </Card.Text>
-                <Form.Control
-                  onInput={(e) =>
-                    setCurrentTask({
-                      ...currentTask,
-                      title: e.target.value,
-                    })
-                  }
-                />
                 <Card.Text>
                   <strong>{`Skola: `}</strong>
                   {tasks[itemIndex].schoolName}
+
+                  <Form.Control
+                    onInput={(e) =>
+                      setCurrentTask({
+                        ...currentTask,
+                        schoolName: e.target.value,
+                      })
+                    }
+                  />
                 </Card.Text>
-                <Form.Control
-                  onInput={(e) =>
-                    setCurrentTask({
-                      ...currentTask,
-                      schoolName: e.target.value,
-                    })
-                  }
-                />
                 <Card.Text>
                   <strong>{`Stad: `}</strong>
                   {tasks[itemIndex].location}
+                  <Form.Control
+                    onChange={(e) =>
+                      setCurrentTask({
+                        ...currentTask,
+                        location: e.target.value,
+                      })
+                    }
+                  />
                 </Card.Text>
-                <Form.Control
-                  onChange={(e) =>
-                    setCurrentTask({
-                      ...currentTask,
-                      location: e.target.value,
-                    })
-                  }
-                />
                 <Card.Text>
                   <strong>{`Kurs: `}</strong>
                   {tasks[itemIndex].class}
+                  <Form.Control
+                    onChange={(e) =>
+                      setCurrentTask({
+                        ...currentTask,
+                        class: e.target.value,
+                      })
+                    }
+                  />
                 </Card.Text>
-                <Form.Control
-                  onChange={(e) =>
-                    setCurrentTask({
-                      ...currentTask,
-                      class: e.target.value,
-                    })
-                  }
-                />
                 <Card.Text>
                   <strong>{`Datum: `}</strong>
                   {tasks[itemIndex].date}
+                  <Form.Control
+                    onChange={(e) =>
+                      setCurrentTask({
+                        ...currentTask,
+                        date: e.target.value,
+                      })
+                    }
+                  />
                 </Card.Text>
-                <Form.Control
-                  onChange={(e) =>
-                    setCurrentTask({
-                      ...currentTask,
-                      date: e.target.value,
-                    })
-                  }
-                />
                 <Card.Text>
                   <strong>{`Tid: `}</strong>
                   {`${tasks[itemIndex].timeStart}-${tasks[itemIndex].timeEnd}`}
+                  <Form.Control
+                    required
+                    placeholder="Från: "
+                    onChange={(e) =>
+                      setCurrentTask({
+                        ...currentTask,
+                        timeStart: e.target.value,
+                      })
+                    }
+                  />
+                  <Form.Control
+                    style={{ marginTop: "5px" }}
+                    required
+                    placeholder="Till:"
+                    onChange={(e) =>
+                      setCurrentTask({
+                        ...currentTask,
+                        timeEnd: e.target.value,
+                      })
+                    }
+                  />
                 </Card.Text>
-                <Form.Control
-                  required
-                  placeholder="Från klockan: xx.xx"
-                  onChange={(e) =>
-                    setCurrentTask({
-                      ...currentTask,
-                      timeStart: e.target.value,
-                    })
-                  }
-                />{" "}
-                <br />
-                <Form.Control
-                  required
-                  placeholder="Till klockan: xx.xx"
-                  onChange={(e) =>
-                    setCurrentTask({
-                      ...currentTask,
-                      timeEnd: e.target.value,
-                    })
-                  }
-                />
+
                 <Card.Text>
                   <strong>{`Beskrivning: `}</strong>
                   {tasks[itemIndex].text}
                 </Card.Text>
                 <Form.Control
+                  as="textarea"
                   required
                   onChange={(e) =>
                     setCurrentTask({
@@ -343,6 +345,9 @@ const TaskManager = () => {
           )}
         </Modal.Body>
         <Modal.Footer className="justify-content-between">
+          <p style={{ fontStyle: "italic", textAlign: "start" }}>
+            {`Tryck på ändra för att spara dina ändringar`}
+          </p>
           <Button
             variant="primary"
             style={{ width: "15%" }}
@@ -458,7 +463,7 @@ const TaskManager = () => {
                         onClick={() => {
                           setTask("");
                           handleShow();
-                        }}>{`stäng`}</Button>
+                        }}>{`Stäng`}</Button>
                     </div>
                   </Card>
                 </Row>
